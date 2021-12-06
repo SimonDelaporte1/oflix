@@ -30,7 +30,13 @@ Class MainController extends AbstractController
      */
     public function movieShow($id)
     {
-        // affiche quelque chose
-        return new Response("Page du film/série dont l'id est : " . $id);
+        // on rend un template twig à partir du dossier templates/
+        $moviesModel = new Movies;
+        $moviesList = $moviesModel->getAllMovies();
+        $this_movie_info = $moviesList[$id];
+        return $this->render('main/movieShow.html.twig', [
+            'this_movie_info' => $this_movie_info,
+            'BASE' => $_SERVER['BASE']
+        ]);
     }
 }
