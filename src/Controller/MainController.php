@@ -54,4 +54,18 @@ Class MainController extends AbstractController
             'BASE' => $_SERVER['BASE']
         ]);
     }
+
+    /** 
+     * @Route("/list.html", name="main_movie_list")
+     */
+    public function movieList()
+    {
+        // on rend un template twig à partir du dossier templates/
+        $moviesModel = new Movies;
+        $moviesList = $moviesModel->getAllMovies();
+        return $this->render('main/movieList.html.twig', [
+            'moviesList' => $moviesList,
+            'BASE' => $_SERVER['BASE']
+        ]);
+    }
 }
