@@ -2,10 +2,11 @@
 
 namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use App\Model\Movies;
 use Symfony\Component\HttpFoundation\Response;
 // un use est nécessaire pour les @route
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 
 
@@ -17,7 +18,11 @@ Class MainController extends AbstractController
     public function home()
     {
         // on rend un template twig à partir du dossier templates/
-        return $this->render('main/home.html.twig');
+        $moviesModel = new Movies;
+        $moviesList = $moviesModel->getAllMovies();
+        return $this->render('main/home.html.twig', [
+            'moviesList' => $moviesList
+        ]);
     }
 
     /** 
