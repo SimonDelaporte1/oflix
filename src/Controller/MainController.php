@@ -21,7 +21,8 @@ Class MainController extends AbstractController
         $moviesModel = new Movies;
         $moviesList = $moviesModel->getAllMovies();
         return $this->render('main/home.html.twig', [
-            'moviesList' => $moviesList
+            'moviesList' => $moviesList,
+            'BASE' => $_SERVER['BASE']
         ]);
     }
 
@@ -36,6 +37,20 @@ Class MainController extends AbstractController
         $this_movie_info = $moviesList[$id];
         return $this->render('main/movieShow.html.twig', [
             'this_movie_info' => $this_movie_info,
+            'BASE' => $_SERVER['BASE']
+        ]);
+    }
+
+    /** 
+     * @Route("/favorites.html", name="main_movie_favoris")
+     */
+    public function movieFavoris()
+    {
+        // on rend un template twig à partir du dossier templates/
+        $moviesModel = new Movies;
+        $moviesList = $moviesModel->getAllMovies();
+        return $this->render('main/movieFavoris.html.twig', [
+            'moviesList' => $moviesList,
             'BASE' => $_SERVER['BASE']
         ]);
     }

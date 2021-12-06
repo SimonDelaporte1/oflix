@@ -14,7 +14,7 @@
     <!-- Our custom CSS -->
     <link rel="stylesheet" href="{{ BASE }}/css/oflix.css">
     <!-- favicon -->
-    <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ BASE }}/favicon.png" type="image/x-icon">
 
     <title>{% block title %}{% endblock %}</title>
 </head>
@@ -25,7 +25,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
             <a href="./" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none header-logo">
-                <img src="favicon.png" height="24" alt="Logo O'flix">
+                <img src="{{ BASE }}/favicon.png" height="24" alt="Logo O'flix">
                 <span class="header-logo__title">O'flix</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -41,7 +41,7 @@
                         <a class="nav-link" href="./list.html"><i class="bi bi-film"></i> Films, séries TV</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="./favorites.html"><i class="bi bi-bookmark"></i> Ma liste</a>
+                        <a class="nav-link" href="{{ BASE }}/favorites.html"><i class="bi bi-bookmark"></i> Ma liste</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
