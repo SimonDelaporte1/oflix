@@ -57,11 +57,14 @@
                             <p><small>{{ movie.summary }}</small>
                             </p>
                             <div class="d-flex" style="color: orange;">
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
-                                <i class="bi bi-star-fill"></i>
+                                {% set k = movie.rating %}
+                                {% for i in range(1, movie.rating) %}
+                                    <i class="bi bi-star-fill"></i>
+                                    {% set k = k-1 %}
+                                {% endfor %}
+                                {% if k>0 %}
                                 <i class="bi bi-star-half"></i>
+                                {% endif %}
                                 <span class="ps-1">{{ movie.rating }}</span>
                             </div>
                             <a href="{{BASE}}/movie/{{ key }}" class="fs-1 mt-3 text-danger align-self-start">
