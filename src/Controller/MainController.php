@@ -26,7 +26,7 @@ Class MainController extends AbstractController
     }
 
     /** 
-     * @Route("/movie/{id}", name="main_movie_show")
+     * @Route("/movie/{id}", name="main_movie_show", requirements={"id"="\d+"})
      */
     public function movieShow($id)
     {
@@ -42,18 +42,6 @@ Class MainController extends AbstractController
         ]);
     }
 
-    /** 
-     * @Route("/favorites", name="main_movie_favoris")
-     */
-    public function favorites()
-    {
-        // on rend un template twig à partir du dossier templates/
-        $moviesModel = new Movies;
-        $moviesList = $moviesModel->getAllMovies();
-        return $this->render('main/movieFavoris.html.twig', [
-            'moviesList' => $moviesList
-        ]);
-    }
 
     /** 
      * @Route("/movies/list", name="main_movie_list")
