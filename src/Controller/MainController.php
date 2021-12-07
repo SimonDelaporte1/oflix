@@ -33,6 +33,10 @@ Class MainController extends AbstractController
         // on rend un template twig à partir du dossier templates/
         $moviesModel = new Movies;
         $this_movie_info = $moviesModel->getMovieById($id);
+
+        if($this_movie_info === null) {
+            throw $this->createNotFoundException('Film ou série non trouvé.');
+        }
         return $this->render('main/movieShow.html.twig', [
             'this_movie_info' => $this_movie_info
         ]);

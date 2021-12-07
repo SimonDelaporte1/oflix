@@ -60,9 +60,15 @@ Class Movies {
 
     /**
      * get one movies
+     * 
+     * @return array|null Movie data if found, else null
      */
-    public function getMovieById(int $id)
+    public function getMovieById(int $id) : ?array
     {
-        return $this->shows[$id];
+        if (isset($this->shows[$id])) {
+            return $this->shows[$id];
+        } else {
+            return null;
+        }
     }
 }
