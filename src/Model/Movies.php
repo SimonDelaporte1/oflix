@@ -56,4 +56,13 @@ Class Movies {
     {
         return $this->shows;
     }
+
+
+    /**
+     * get one movies
+     */
+    public function getMovieById(int $id)
+    {
+        return $this->shows[$id];
+    }
 }

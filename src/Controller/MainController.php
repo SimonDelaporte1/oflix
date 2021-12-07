@@ -32,8 +32,7 @@ Class MainController extends AbstractController
     {
         // on rend un template twig à partir du dossier templates/
         $moviesModel = new Movies;
-        $moviesList = $moviesModel->getAllMovies();
-        $this_movie_info = $moviesList[$id];
+        $this_movie_info = $moviesModel->getMovieById($id);
         return $this->render('main/movieShow.html.twig', [
             'this_movie_info' => $this_movie_info
         ]);

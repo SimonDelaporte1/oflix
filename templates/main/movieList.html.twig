@@ -37,7 +37,7 @@
 
             {% for key,movie in moviesList %}
                 <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm bg-white position-relative">
-                    <div class="col-4 movie__poster" style="background-image: url({{ movie.poster }});">
+                    <div class="col-4 movie__poster" style="background-image: url('{{ movie.poster }}');">
                         <img src="{{ asset('images/poster-placeholder.png') }}" class="img-fluid">
                     </div>
                     <div class="col-8 p-4 d-flex flex-column position-static">

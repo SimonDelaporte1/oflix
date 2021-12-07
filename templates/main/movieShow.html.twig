@@ -1,6 +1,6 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Bienvenue sur la page du film O'flix !! {% endblock %}
+{% block title %}Bienvenue sur la page du film {{ this_movie_info.title }} {% endblock %}
 
 
 {% block body %}
@@ -13,13 +13,13 @@
             <div
                 class="row g-0 borderrr rrrounded overflow-hidden flex-md-row align-items-start mb-4 shadow-smmm position-relative">
                 <div class="col-4 movie__poster img-thumbnail"
-                style="background-image: url({{ this_movie_info.poster }});">
+                style="background-image: url('{{ this_movie_info.poster }}');">
                 <img src="{{ asset('images/poster-placeholder.png') }}" class="img-fluid">
             </div>
 
                 <div class="col-8 p-4 d-flex flex-column position-static bg-light">
                     <a href="" class="movie__favorite fs-1 my-2 mx-3 link-danger"><i class="bi bi-bookmark-plus"></i></a>
-                    <strong class="d-inline-block mb-2 text-primary">{{ this_movie_info.type }}</strong>
+                    <strong class="d-inline-block mb-2 text-{% if this_movie_info.type == 'Film' %}primary{% else %}success{% endif %}">{{ this_movie_info.type }}</strong>
                     <h3 class="mb-1">{{ this_movie_info.title }}</h3>
                     <div class="mb-1 text-muted">{{ this_movie_info.duration }} min</div>
                     <p>
@@ -28,7 +28,7 @@
                         <span class="badge bg-warning text-dark">Comédie</span>
                         <span class="badge bg-warning text-dark">Famille</span>
                     </p>
-                    {{ this_movie_info.synopsis }}
+                    <p>{{ this_movie_info.synopsis }}</p>
                     <div class="d-flex" style="color: orange;">
                         {% set k = this_movie_info.rating %}
                         {% for i in range(1, this_movie_info.rating) %}
