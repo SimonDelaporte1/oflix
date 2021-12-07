@@ -42,9 +42,9 @@ Class MainController extends AbstractController
     }
 
     /** 
-     * @Route("/favorites.html", name="main_movie_favoris")
+     * @Route("/favorites", name="main_movie_favoris")
      */
-    public function movieFavoris()
+    public function favorites()
     {
         // on rend un template twig à partir du dossier templates/
         $moviesModel = new Movies;
@@ -56,9 +56,9 @@ Class MainController extends AbstractController
     }
 
     /** 
-     * @Route("/list.html", name="main_movie_list")
+     * @Route("/movies/list", name="main_movie_list")
      */
-    public function movieList()
+    public function list()
     {
         // on rend un template twig à partir du dossier templates/
         $moviesModel = new Movies;
