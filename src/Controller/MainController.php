@@ -7,8 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 // un use est nécessaire pour les @route
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
-
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 Class MainController extends AbstractController
 {
@@ -17,6 +16,8 @@ Class MainController extends AbstractController
      */
     public function home()
     {
+        
+        
         // on rend un template twig à partir du dossier templates/
         $moviesModel = new Movies;
         $moviesList = $moviesModel->getAllMovies();
@@ -54,5 +55,33 @@ Class MainController extends AbstractController
         return $this->render('main/movieList.html.twig', [
             'moviesList' => $moviesList
         ]);
+    }
+
+    
+
+    /** 
+     * 
+     * theme switcher
+     * 
+     * @Route("/theme/toggle", name="main_theme_switcher")
+     */
+    public function themeSwitcher(SessionInterface $session)
+    {
+        // notre but est de stocker en session utilisateur le theme choisi
+        
+        // on récupère le theme de la session
+        $theme = $session->get('theme', 'netflix');
+
+        // on inverse le theme
+        if($theme === 'netflix' ) {
+            $session->set('theme', 'allocine');
+        } else{
+            $session->set('theme', 'netflix');
+        }
+
+        // on redirige vers la home
+        return $this->redirectToRoute('main_home');
+
+        // puis dans le template base.html.twig on conditionnera le CSS de la nav selon le theme choisi
     }
 }

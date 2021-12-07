@@ -20,9 +20,17 @@
 </head>
 
 <body>
+    {#
+        {% dump app.session.get('theme')  %}
+        {{ dump(app.session.get('theme'))  }}
+    #}
 
     <!-- Nav -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    {% if app.session.get('theme') == 'allocine' %}
+        <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #fecc00;">
+    {% else %}
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    {% endif %}
         <div class="container-fluid">
             <a href="{{ path('main_home') }}" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none header-logo">
                 <img src="{{ asset('favicon.png') }}" height="24" alt="Logo O'flix">
@@ -77,7 +85,16 @@
     <!-- footer -->
     <footer class="container-fluid py-4 border-top text-center">
         <span class="text-muted">O'flix made with &hearts; at O'clock !
-            <br><small>Thème :<a href="" class="link-secondary text-decoration-none"><i class="bi bi-toggle-on mx-1"></i>Netflix</a></small></a>
+            <br><small>Thème :
+                <a href="{{ path('main_theme_switcher') }}" class="link-secondary text-decoration-none">
+                    {% if app.session.get('theme') == 'allocine' %}
+                    Netflix  <i class="bi bi-toggle-on mx-1"></i>Allocine
+                    {% else %}
+                    Netflix <i class="bi bi-toggle-off mx-1"></i>Allocine
+                    {% endif %}
+                </a>
+                </small>
+                
         </span>
     </footer>
 
