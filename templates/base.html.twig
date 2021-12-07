@@ -87,7 +87,7 @@
         <span class="text-muted">O'flix made with &hearts; at O'clock !
             <br><small>Thème :
                 <a href="{{ path('main_theme_switcher') }}" class="link-secondary text-decoration-none">
-                    {% if app.session.get('theme') == 'allocine' %}
+                    {% if app.session.get('theme', 'allocine') == 'allocine' %}
                     Netflix  <i class="bi bi-toggle-on mx-1"></i>Allocine
                     {% else %}
                     Netflix <i class="bi bi-toggle-off mx-1"></i>Allocine
