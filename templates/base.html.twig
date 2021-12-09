@@ -43,13 +43,13 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ path('main_home') }}">Accueil</a>
+                        <a class="nav-link {% block nav_active_home %}{% endblock %}" href="{{ path('main_home') }}">Accueil</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('main_movie_list') }}"><i class="bi bi-film"></i> Films, séries TV</a>
+                        <a class="nav-link  {% block nav_active_movies %}{% endblock %}" href="{{ path('main_movie_list') }}"><i class="bi bi-film"></i> Films, séries TV</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('favorites_list') }}"><i class="bi bi-bookmark"></i> Ma liste</a>
+                        <a class="nav-link {% block nav_active_favorites %}{% endblock %}" href="{{ path('favorites_list') }}"><i class="bi bi-bookmark"></i> Ma liste</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
@@ -87,7 +87,7 @@
         <span class="text-muted">O'flix made with &hearts; at O'clock !
             <br><small>Thème :
                 <a href="{{ path('main_theme_switcher') }}" class="link-secondary text-decoration-none">
-                    {% if app.session.get('theme', 'allocine') == 'allocine' %}
+                    {% if app.session.get('theme', '') == 'allocine' %}
                     Netflix  <i class="bi bi-toggle-on mx-1"></i>Allocine
                     {% else %}
                     Netflix <i class="bi bi-toggle-off mx-1"></i>Allocine
