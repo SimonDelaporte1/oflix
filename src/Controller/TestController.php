@@ -53,9 +53,10 @@ class TestController extends AbstractController
     {
         $movie = $MovieRepository->find($id);
 
-        dd($movie);
+       return $this->render('test/show.html.twig', [
+            'movie'=>$movie
+        ]);
     }
-
 
     /**
      * @Route("/test/movie/update/{id}", requirements={"id"="\d+"})
