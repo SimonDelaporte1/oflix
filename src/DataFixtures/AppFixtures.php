@@ -25,13 +25,13 @@ class AppFixtures extends Fixture
             array('Margot', 'Robbie'),
         );
         $role_array = array(
-            array(1, 'Le bon'),
-            array(2, 'La brute'),
-            array(3, 'Le truant'),
-            array(4, 'La personne mystere'),
-            array(5, 'Le réverbère'),
-            array(6, 'Doublure'),
-            array(7, 'Figurant')
+           'Le bon',
+            'La brute',
+            'Le truant',
+            'La personne mystere',
+            'Le réverbère',
+            'Doublure',
+            'Figurant'
         );
         $genre_array = array(
             'Sci-fi',
@@ -72,6 +72,7 @@ class AppFixtures extends Fixture
         }
         $manager->flush();
 
+        // intersion des personnes (acteur) en BDD
         foreach($person_array as $this_person_array){
             $person = new Person();
             $person->setFirstname($this_person_array[0]);
@@ -80,6 +81,7 @@ class AppFixtures extends Fixture
         }
         $manager->flush();
   
+        // insertion des genres en BDD
         foreach($genre_array as $this_genre_name){
             $genre = new Genre();
             $genre->setName($this_genre_name);
@@ -88,17 +90,16 @@ class AppFixtures extends Fixture
         $manager->flush();
               
 
-
         // maintenant que tout est créé, on fait les associations : Saison, Casting et Genre
         foreach ($movie_array as $this_movie_array) {
             shuffle($role_array);
-            $i = 1;
             $MovieRepository = $manager->getRepository(Movie::class);
             $movie = $MovieRepository->findOneBy(['title'=>$this_movie_array['title']]);
-            foreach ($role_array as $this_role_array) {
+            $i=1;
+            foreach ($role_array as $this_role_name) {
                 $casting = new Casting();
-                $casting->setCreditOrder($this_role_array[0]);
-                $casting->setRole($this_role_array[1]);
+                $casting->setCreditOrder($i);
+                $casting->setRole($this_role_name);
                 
                 $PersonRepository = $manager->getRepository(Person::class);
                 $person = $PersonRepository->findAll()[mt_rand(0,6)];
@@ -127,7 +128,6 @@ class AppFixtures extends Fixture
                 }
             }
             $manager->persist($movie);
-            $manager->flush();
 
             //saison
             if ($this_movie_array['type'] == 'Série') {
@@ -142,9 +142,8 @@ class AppFixtures extends Fixture
                         break;
                     }
                 }
-                $manager->flush();
             }
+            $manager->flush();
         }
-        
     }
 }
