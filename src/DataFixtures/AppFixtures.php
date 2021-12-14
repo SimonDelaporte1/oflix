@@ -2,10 +2,12 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Casting;
+use DateTime;
+use App\Entity\Genre;
 use App\Entity\Movie;
 use App\Entity\Person;
-use DateTime;
+use App\Entity\Casting;
+use App\Entity\Season;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 
@@ -23,26 +25,37 @@ class AppFixtures extends Fixture
             array('Margot', 'Robbie'),
         );
         $role_array = array(
-            array(1, 'Le méchant'),
-            array(2, 'Le gentil'),
-            array(3, 'Le baggagiste'),
+            array(1, 'Le bon'),
+            array(2, 'La brute'),
+            array(3, 'Le truant'),
             array(4, 'La personne mystere'),
-            array(5, 'L\'atout'),
-            array(6, 'doublure'),
-            array(7, 'figurant')
+            array(5, 'Le réverbère'),
+            array(6, 'Doublure'),
+            array(7, 'Figurant')
+        );
+        $genre_array = array(
+            'Sci-fi',
+            'Comédie',
+            'Drame',
+            'Pénible',
+            'Mal joué',
+            'Epique'
         );
         $synopsis_array = array('Lorem', 'ipsum', 'dolor', 'sit', 'amet', 'bla', 'bli', 'je', 'mange', 'des', 'légumes', 'avec', 'de', 'la', 'soupe');
         $summary_array = array('Ceci', 'est', 'une', 'description', 'courte', 'du', 'film', 'que', 'vous', 'allez', 'voir', 'consectetur', 'adipiscing','elit.','Proin','et','aliquet','nibh.','ed','nec','velit','vel','lacus','posuere','dignissim.','Nunc','gravida','auctor','dapibus.','Nulla','faucibus','justo','in','accumsan','laoreet.','Suspendisse','quis','lacinia','tortor.','Cras','auctor','lorem','eget','efficitur','tincidunt.','Vestibulum','ac','eleifend','lectus.','Cras','fringilla','felis','nec','posuere','feugiat.');
+
+        // summary et synopsis seront ajouté au dernier moment, pour faire un shuffle sur ces tableaux à chaque itération
         $movie_array = array(
-            array('type'=>'Film','title'=>'La moussaka géante','release_date'=>new DateTime(mt_rand(1900,2100).'-'.mt_rand(1,12).'-'.mt_rand(1,12)),'duration'=>mt_rand(60,220),'poster'=>'https://picsum.photos/200/300','rating'=>mt_rand(1,5)),
+            array('type'=>'Film','title'=>'L’Attaque de la Moussaka géante','release_date'=>new DateTime(mt_rand(1900,2100).'-'.mt_rand(1,12).'-'.mt_rand(1,12)),'duration'=>mt_rand(60,220),'poster'=>'https://picsum.photos/200/300','rating'=>mt_rand(1,5)),
             array('type'=>'Série','title'=>'Game of throne','release_date'=>new DateTime(mt_rand(1900,2100).'-'.mt_rand(1,12).'-'.mt_rand(1,12)),'duration'=>mt_rand(60,220),'poster'=>'https://picsum.photos/200/300','rating'=>mt_rand(1,5)),
             array('type'=>'Film','title'=>'100 000 dollars au soleil','release_date'=>new DateTime(mt_rand(1900,2100).'-'.mt_rand(1,12).'-'.mt_rand(1,12)),'duration'=>mt_rand(60,220),'poster'=>'https://picsum.photos/200/300','rating'=>mt_rand(1,5)),
             array('type'=>'Film','title'=>'Jack Reacher','release_date'=>new DateTime(mt_rand(1900,2100).'-'.mt_rand(1,12).'-'.mt_rand(1,12)),'duration'=>mt_rand(60,220),'poster'=>'https://picsum.photos/200/300','rating'=>mt_rand(1,5)),
             array('type'=>'Film','title'=>'Suicide squad','release_date'=>new DateTime(mt_rand(1900,2100).'-'.mt_rand(1,12).'-'.mt_rand(1,12)),'duration'=>mt_rand(60,220),'poster'=>'https://picsum.photos/200/300','rating'=>mt_rand(1,5)),
-            array('type'=>'Film','title'=>'un flic','release_date'=>new DateTime(mt_rand(1900,2100).'-'.mt_rand(1,12).'-'.mt_rand(1,12)),'duration'=>mt_rand(60,220),'poster'=>'https://picsum.photos/200/300','rating'=>mt_rand(1,5)),
+            array('type'=>'Film','title'=>'Un flic','release_date'=>new DateTime(mt_rand(1900,2100).'-'.mt_rand(1,12).'-'.mt_rand(1,12)),'duration'=>mt_rand(60,220),'poster'=>'https://picsum.photos/200/300','rating'=>mt_rand(1,5)),
             array('type'=>'Série','title'=>'La casa de papel','release_date'=>new DateTime(mt_rand(1900,2100).'-'.mt_rand(1,12).'-'.mt_rand(1,12)),'duration'=>mt_rand(60,220),'poster'=>'https://picsum.photos/200/300','rating'=>mt_rand(1,5)),
             array('type'=>'Série','title'=>'Narco','release_date'=>new DateTime(mt_rand(1900,2100).'-'.mt_rand(1,12).'-'.mt_rand(1,12)),'duration'=>mt_rand(60,220),'poster'=>'https://picsum.photos/200/300','rating'=>mt_rand(1,5)),
         );
+        // on rentre les films en BDD. Utile pour initialisé l'objet movie par la suite. On pourrait tout créer dans la même boucle, je préfère par étape c'est plus clair. Et c'est pas comme si il y avait beaucoup de donnée
         foreach($movie_array as $this_movie_array) {
             $movie = new Movie();
             shuffle($synopsis_array);
@@ -66,7 +79,17 @@ class AppFixtures extends Fixture
             $manager->persist($person);
         }
         $manager->flush();
-        
+  
+        foreach($genre_array as $this_genre_name){
+            $genre = new Genre();
+            $genre->setName($this_genre_name);
+            $manager->persist($genre);
+        }
+        $manager->flush();
+              
+
+
+        // maintenant que tout est créé, on fait les associations : Saison, Casting et Genre
         foreach ($movie_array as $this_movie_array) {
             shuffle($role_array);
             $i = 1;
@@ -91,9 +114,37 @@ class AppFixtures extends Fixture
                     break;
                 }
             }
-        }
 
-        $manager->flush();
+            // genre
+            $GenreRepository = $manager->getRepository(Genre::class);
+            $genreList = $GenreRepository->findAll();
+            shuffle($genreList);
+            foreach ($genreList as $this_genre) {
+                $movie->addGenre($this_genre);
+                if ($i%mt_rand(1, 7) == 0) {
+                    // pour ne pas avoir toujours le même nombre de genre dans un film
+                    break;
+                }
+            }
+            $manager->persist($movie);
+            $manager->flush();
+
+            //saison
+            if ($this_movie_array['type'] == 'Série') {
+                for ($i=1;$i<20;$i++) {
+                    $season = new Season();
+                    $season->setNumber($i);
+                    $season->setEpisodesNumber(mt_rand(2, 10));
+                    $season->SetMovie($movie);
+                    $manager->persist($season);
+                    if ($i%mt_rand(1, 20) == 0) {
+                        // pour ne pas avoir toujours le même nombre de saison pour les séries
+                        break;
+                    }
+                }
+                $manager->flush();
+            }
+        }
         
     }
 }
