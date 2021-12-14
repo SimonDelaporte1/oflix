@@ -2,42 +2,44 @@
 
 namespace App\Controller;
 
-use App\Model\Movies;
-use Symfony\Component\HttpFoundation\Response;
+use App\Entity\Movie;
+use App\Repository\GenreRepository;
+use App\Repository\MovieRepository;
 // un use est nécessaire pour les @route
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 Class MainController extends AbstractController
 {
     /** 
      * @Route("/", name="main_home")
      */
-    public function home()
+    public function home(MovieRepository $MovieRepository, GenreRepository $GenreRepository)
     {
-        
-        
         // on rend un template twig à partir du dossier templates/
-        $moviesModel = new Movies;
-        $moviesList = $moviesModel->getAllMovies();
+        $moviesList = $MovieRepository->findAll();
+        $genreList = $GenreRepository->findAll();
         return $this->render('main/home.html.twig', [
-            'moviesList' => $moviesList
+            'moviesList' => $moviesList,
+            'genreList' => $genreList
         ]);
     }
 
     /** 
      * @Route("/movie/{id}", name="main_movie_show", requirements={"id"="\d+"})
      */
-    public function movieShow($id)
+    public function movieShow(MovieRepository $MovieRepository, $id)
     {
         // on rend un template twig à partir du dossier templates/
-        $moviesModel = new Movies;
-        $this_movie_info = $moviesModel->getMovieById($id);
+        $this_movie_info = $MovieRepository->find($id);
 
         if($this_movie_info === null) {
             throw $this->createNotFoundException('Film ou série non trouvé.');
         }
+
+        // dd($this_movie_info);
         return $this->render('main/movieShow.html.twig', [
             'this_movie_info' => $this_movie_info
         ]);

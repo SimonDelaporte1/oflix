@@ -47,7 +47,7 @@ class Movie
     /**
      * @ORM\ManyToMany(targetEntity=Genre::class, inversedBy="movies")
      */
-    private $genre;
+    private $genres;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -78,7 +78,7 @@ class Movie
     {
         $this->seasons = new ArrayCollection();
         $this->castings = new ArrayCollection();
-        $this->genre = new ArrayCollection();
+        $this->genres = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -183,25 +183,25 @@ class Movie
     }
 
     /**
-     * @return Collection|Genre[]
+     * @return Collection|genres[]
      */
-    public function getGenre(): Collection
+    public function getGenres(): Collection
     {
-        return $this->genre;
+        return $this->genres;
     }
 
-    public function addGenre(Genre $genre): self
+    public function addGenres(Genre $genre): self
     {
-        if (!$this->genre->contains($genre)) {
-            $this->genre[] = $genre;
+        if (!$this->genres->contains($genre)) {
+            $this->genres[] = $genre;
         }
 
         return $this;
     }
 
-    public function removeGenre(Genre $genre): self
+    public function removeGenres(Genre $genre): self
     {
-        $this->genre->removeElement($genre);
+        $this->genres->removeElement($genre);
 
         return $this;
     }

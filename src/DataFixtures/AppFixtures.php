@@ -72,7 +72,7 @@ class AppFixtures extends Fixture
         }
         $manager->flush();
 
-        // intersion des personnes (acteur) en BDD
+        // insertion des personnes (acteur) en BDD
         foreach($person_array as $this_person_array){
             $person = new Person();
             $person->setFirstname($this_person_array[0]);
