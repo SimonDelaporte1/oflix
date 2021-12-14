@@ -49,6 +49,31 @@ class Movie
      */
     private $genre;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $summary;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $synopsis;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $poster;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $rating;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $duration;
+
     public function __construct()
     {
         $this->seasons = new ArrayCollection();
@@ -177,6 +202,66 @@ class Movie
     public function removeGenre(Genre $genre): self
     {
         $this->genre->removeElement($genre);
+
+        return $this;
+    }
+
+    public function getSummary(): ?string
+    {
+        return $this->summary;
+    }
+
+    public function setSummary(?string $summary): self
+    {
+        $this->summary = $summary;
+
+        return $this;
+    }
+
+    public function getSynopsis(): ?string
+    {
+        return $this->synopsis;
+    }
+
+    public function setSynopsis(?string $synopsis): self
+    {
+        $this->synopsis = $synopsis;
+
+        return $this;
+    }
+
+    public function getPoster(): ?string
+    {
+        return $this->poster;
+    }
+
+    public function setPoster(?string $poster): self
+    {
+        $this->poster = $poster;
+
+        return $this;
+    }
+
+    public function getRating(): ?float
+    {
+        return $this->rating;
+    }
+
+    public function setRating(?float $rating): self
+    {
+        $this->rating = $rating;
+
+        return $this;
+    }
+
+    public function getDuration(): ?int
+    {
+        return $this->duration;
+    }
+
+    public function setDuration(?int $duration): self
+    {
+        $this->duration = $duration;
 
         return $this;
     }
