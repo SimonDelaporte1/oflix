@@ -27,6 +27,16 @@ class Casting
      */
     private $creditOrder;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Person::class, inversedBy="castings")
+     */
+    private $person;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Movie::class, inversedBy="castings")
+     */
+    private $movie;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -52,6 +62,30 @@ class Casting
     public function setCreditOrder(?int $creditOrder): self
     {
         $this->creditOrder = $creditOrder;
+
+        return $this;
+    }
+
+    public function getPerson(): ?Person
+    {
+        return $this->person;
+    }
+
+    public function setPerson(?Person $person): self
+    {
+        $this->person = $person;
+
+        return $this;
+    }
+
+    public function getMovie(): ?Movie
+    {
+        return $this->movie;
+    }
+
+    public function setMovie(?Movie $movie): self
+    {
+        $this->movie = $movie;
 
         return $this;
     }

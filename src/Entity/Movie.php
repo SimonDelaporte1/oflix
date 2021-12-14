@@ -39,9 +39,21 @@ class Movie
      */
     private $seasons;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Casting::class, mappedBy="movie")
+     */
+    private $castings;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Genre::class, inversedBy="movies")
+     */
+    private $genre;
+
     public function __construct()
     {
         $this->seasons = new ArrayCollection();
+        $this->castings = new ArrayCollection();
+        $this->genre = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -111,6 +123,60 @@ class Movie
                 $season->setMovie(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Casting[]
+     */
+    public function getCastings(): Collection
+    {
+        return $this->castings;
+    }
+
+    public function addCasting(Casting $casting): self
+    {
+        if (!$this->castings->contains($casting)) {
+            $this->castings[] = $casting;
+            $casting->setMovie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCasting(Casting $casting): self
+    {
+        if ($this->castings->removeElement($casting)) {
+            // set the owning side to null (unless already changed)
+            if ($casting->getMovie() === $this) {
+                $casting->setMovie(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Genre[]
+     */
+    public function getGenre(): Collection
+    {
+        return $this->genre;
+    }
+
+    public function addGenre(Genre $genre): self
+    {
+        if (!$this->genre->contains($genre)) {
+            $this->genre[] = $genre;
+        }
+
+        return $this;
+    }
+
+    public function removeGenre(Genre $genre): self
+    {
+        $this->genre->removeElement($genre);
 
         return $this;
     }
