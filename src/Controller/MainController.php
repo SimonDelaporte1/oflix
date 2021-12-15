@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Movie;
+use App\Repository\CastingRepository;
 use App\Repository\GenreRepository;
 use App\Repository\MovieRepository;
 // un use est nécessaire pour les @route
@@ -30,7 +31,7 @@ Class MainController extends AbstractController
     /** 
      * @Route("/movie/{id}", name="main_movie_show", requirements={"id"="\d+"})
      */
-    public function movieShow(MovieRepository $MovieRepository, $id)
+    public function movieShow(CastingRepository $CastingRepository, MovieRepository $MovieRepository, $id)
     {
         // on rend un template twig à partir du dossier templates/
         $this_movie_info = $MovieRepository->find($id);
@@ -38,10 +39,11 @@ Class MainController extends AbstractController
         if($this_movie_info === null) {
             throw $this->createNotFoundException('Film ou série non trouvé.');
         }
-
+        $casting = $CastingRepository->findAllJoinedToCastingQb($id);
         // dd($this_movie_info);
         return $this->render('main/movieShow.html.twig', [
-            'this_movie_info' => $this_movie_info
+            'this_movie_info' => $this_movie_info,
+            'casting' => $casting
         ]);
     }
 
