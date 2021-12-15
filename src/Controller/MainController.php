@@ -19,7 +19,7 @@ Class MainController extends AbstractController
     public function home(MovieRepository $MovieRepository, GenreRepository $GenreRepository)
     {
         // on rend un template twig à partir du dossier templates/
-        $moviesList = $MovieRepository->findAll();
+        $moviesList = $MovieRepository->findAllOrderedByDateAscQb();
         $genreList = $GenreRepository->findAll();
         return $this->render('main/home.html.twig', [
             'moviesList' => $moviesList,

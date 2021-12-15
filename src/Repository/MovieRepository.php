@@ -51,6 +51,33 @@ class MovieRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+
+    /**
+     * Liste des films par ordre alpha
+     * en Query Builder
+     */
+    public function findAllOrderedByDateAscQb()
+    {
+        return $this->createQueryBuilder('m')
+            ->orderBy('m.releaseDate', 'DESC')
+            ->setMaxResults(5)
+            ->getQuery()
+            ->getResult()
+        ;
+        /*
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQuery(
+            'SELECT m
+            FROM App\Entity\Movie m
+            ORDER BY m.releaseDate DESC'
+        );
+
+        
+        // returns an array of Movie objects
+        return $query->setMaxResults(2)->getResult();
+        */
+    }
     // /**
     //  * @return Movie[] Returns an array of Movie objects
     //  */
