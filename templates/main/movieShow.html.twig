@@ -51,7 +51,7 @@
                     <dl class="row">
                         <dt class="col-sm-12">Avec</dt>
                         <dd class="col-sm-12">
-                            {% for key, actor in this_movie_info.castings|sort((a, b) => a.creditOrder <=> b.creditOrder) %}
+                            {% for key, actor in this_movie_info.castings %}
                             {{ actor.person.firstname }} {{ actor.person.lastname }} ({{ actor.role }})<br />
                             {% endfor %}
                         </dd>

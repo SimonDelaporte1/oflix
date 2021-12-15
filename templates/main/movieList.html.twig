@@ -1,10 +1,12 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Bienvenue sur la page de liste de film O'flix !! {% endblock %}
+{% block title %}Tous les films et séries{% endblock %}
 
 {% block nav_active_movies %}active{% endblock %}
 
 {% block body %}
+
+{% block header %}{% endblock %}
 
 <div class="container-xl bg-light p-5 border-top">
 
@@ -34,38 +36,45 @@
 
         <div class="col-12 col-lg-9">
 
-            <h2 class="text-muted fw-bold mb-4">Les films et séries/Résultats de recherche</h2>
+            <h2 class="text-muted fw-bold mb-4">{% block sub_title %}Les films et séries/Résultats de recherche{% endblock %}</h2>
 
-            {% for key,movie in moviesList %}
-                <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm bg-white position-relative">
-                    <div class="col-4 movie__poster" style="background-image: url('{{ movie.poster }}');">
-                        <img src="{{ asset('images/poster-placeholder.png') }}" class="img-fluid">
-                    </div>
-                    <div class="col-8 p-4 d-flex flex-column position-static">
-                        <a href="" class="movie__favorite fs-1 my-2 mx-3 link-danger"><i class="bi bi-bookmark-plus"></i></a>
-                        <strong class="d-inline-block mb-2 text-primary">{{ movie.type }}</strong>
-                        <h3 class="mb-1">{{ movie.title }}</h3>
-                        <div class="mb-1 text-muted">93 min</div>
-                        <p><small>{{ movie.summary }}</small>
-                        </p>
-                        <div class="d-flex" style="color: orange;">
-                            {% set k = movie.rating %}
-                            {% for i in range(1, movie.rating) %}
-                                <i class="bi bi-star-fill"></i>
-                                {% set k = k-1 %}
-                            {% endfor %}
-                            {% if k > 0 %}
-                            <i class="bi bi-star-half"></i>
-                            {% endif %}
-                            <span class="ps-1">{{ movie.rating }}</span>
-                        </div>
-                        <a href="./movie/{{ key }}" class="fs-1 mt-3 text-danger align-self-start">
-                            <i class="bi bi-arrow-right-square"></i>
-                        </a>
-                    </div>
+            <!-- movie -->
+            {# On boucle avec for..in sur notre liste de films #}
+            {# équivaur à foreach ($moviesList as $movie) #}
+            {# avec les clés : https://twig.symfony.com/doc/3.x/tags/for.html#iterating-over-keys-and-values #}
+            {% for movie in moviesList %}
+            <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm bg-white position-relative">
+                <div class="col-4 movie__poster" style="background-image: url('{{ movie.poster }}');">
+                    <img src="images/poster-placeholder.png" class="img-fluid">
                 </div>
+                <div class="col-8 p-4 d-flex flex-column position-static">
+                    <a href="./favorites.html" class="movie__favorite fs-1 my-2 mx-3 link-danger"><i
+                            class="bi bi-bookmark-plus"></i></a>
+                    {# On doit conditionner la classe CSS appliquée sur le type de film #}
+                    <strong class="d-inline-block mb-2 text-{% if movie.type == 'Film' %}primary{% else %}success{% endif %}">{{
+                        movie.type }}</strong>
+                    <h3 class="mb-1">{{ movie.title }}</h3>
+                    <div class="mb-1 text-muted">{{ movie.duration }} min</div>
+                    <p><small>{{ movie.summary }}</small>
+                    </p>
+                    <div class="d-flex" style="color: orange;">
+                        {% set k = movie.rating %}
+                        {% for i in range(1, movie.rating) %}
+                            <i class="bi bi-star-fill"></i>
+                            {% set k = k-1 %}
+                        {% endfor %}
+                        {% if k>0 %}
+                        <i class="bi bi-star-half"></i>
+                        {% endif %}
+                        <span class="ps-1">{{ movie.rating }}</span>
+                    </div>
+                    <a href="{{ path('main_movie_show', {id: movie.id}) }}" class="fs-1 mt-3 text-danger align-self-start">
+                        <i class="bi bi-arrow-right-square"></i>
+                    </a>
+                </div>
+            </div>
+            <!-- /movie -->
             {% endfor %}
-
 
         </div>
 
@@ -88,5 +97,6 @@
     </div>
 
 </div>
+
 
 {% endblock %}

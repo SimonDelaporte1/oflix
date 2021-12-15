@@ -63,7 +63,7 @@ class Genre
     {
         if (!$this->movies->contains($movie)) {
             $this->movies[] = $movie;
-            $movie->addGenres($this);
+            $movie->addGenre($this);
         }
 
         return $this;
@@ -72,7 +72,7 @@ class Genre
     public function removeMovie(Movie $movie): self
     {
         if ($this->movies->removeElement($movie)) {
-            $movie->removeGenres($this);
+            $movie->removeGenre($this);
         }
 
         return $this;
