@@ -46,16 +46,28 @@ class AppFixtures extends Fixture
 
         // summary et synopsis seront ajouté au dernier moment, pour faire un shuffle sur ces tableaux à chaque itération
         $movie_array = array(
-            array('type'=>'Film','title'=>'L’Attaque de la Moussaka géante','release_date'=>new DateTime(mt_rand(1900,2100).'-'.mt_rand(1,12).'-'.mt_rand(1,12)),'duration'=>mt_rand(60,220),'poster'=>'https://picsum.photos/200/300','rating'=>mt_rand(1,5)),
-            array('type'=>'Série','title'=>'Game of throne','release_date'=>new DateTime(mt_rand(1900,2100).'-'.mt_rand(1,12).'-'.mt_rand(1,12)),'duration'=>mt_rand(60,220),'poster'=>'https://picsum.photos/200/300','rating'=>mt_rand(1,5)),
-            array('type'=>'Film','title'=>'100 000 dollars au soleil','release_date'=>new DateTime(mt_rand(1900,2100).'-'.mt_rand(1,12).'-'.mt_rand(1,12)),'duration'=>mt_rand(60,220),'poster'=>'https://picsum.photos/200/300','rating'=>mt_rand(1,5)),
-            array('type'=>'Film','title'=>'Jack Reacher','release_date'=>new DateTime(mt_rand(1900,2100).'-'.mt_rand(1,12).'-'.mt_rand(1,12)),'duration'=>mt_rand(60,220),'poster'=>'https://picsum.photos/200/300','rating'=>mt_rand(1,5)),
-            array('type'=>'Film','title'=>'Suicide squad','release_date'=>new DateTime(mt_rand(1900,2100).'-'.mt_rand(1,12).'-'.mt_rand(1,12)),'duration'=>mt_rand(60,220),'poster'=>'https://picsum.photos/200/300','rating'=>mt_rand(1,5)),
-            array('type'=>'Film','title'=>'Un flic','release_date'=>new DateTime(mt_rand(1900,2100).'-'.mt_rand(1,12).'-'.mt_rand(1,12)),'duration'=>mt_rand(60,220),'poster'=>'https://picsum.photos/200/300','rating'=>mt_rand(1,5)),
-            array('type'=>'Série','title'=>'La casa de papel','release_date'=>new DateTime(mt_rand(1900,2100).'-'.mt_rand(1,12).'-'.mt_rand(1,12)),'duration'=>mt_rand(60,220),'poster'=>'https://picsum.photos/200/300','rating'=>mt_rand(1,5)),
-            array('type'=>'Série','title'=>'Narco','release_date'=>new DateTime(mt_rand(1900,2100).'-'.mt_rand(1,12).'-'.mt_rand(1,12)),'duration'=>mt_rand(60,220),'poster'=>'https://picsum.photos/200/300','rating'=>mt_rand(1,5)),
+            array('type'=>'Film','title'=>'L’Attaque de la Moussaka géante','release_date'=>new DateTime(mt_rand(1900,2100).'-'.mt_rand(1,12).'-'.mt_rand(1,12)),'duration'=>mt_rand(60,220),'poster'=>'https://picsum.photos/id/'.mt_rand(1,500).'/200/300','rating'=>mt_rand(1,5)),
+            array('type'=>'Série','title'=>'Game of throne','release_date'=>new DateTime(mt_rand(1900,2100).'-'.mt_rand(1,12).'-'.mt_rand(1,12)),'duration'=>mt_rand(60,220),'poster'=>'https://picsum.photos/id/'.mt_rand(1,500).'/200/300','rating'=>mt_rand(1,5)),
+            array('type'=>'Film','title'=>'100 000 dollars au soleil','release_date'=>new DateTime(mt_rand(1900,2100).'-'.mt_rand(1,12).'-'.mt_rand(1,12)),'duration'=>mt_rand(60,220),'poster'=>'https://picsum.photos/id/'.mt_rand(1,500).'/200/300','rating'=>mt_rand(1,5)),
+            array('type'=>'Film','title'=>'Jack Reacher','release_date'=>new DateTime(mt_rand(1900,2100).'-'.mt_rand(1,12).'-'.mt_rand(1,12)),'duration'=>mt_rand(60,220),'poster'=>'https://picsum.photos/id/'.mt_rand(1,500).'/200/300','rating'=>mt_rand(1,5)),
+            array('type'=>'Film','title'=>'Suicide squad','release_date'=>new DateTime(mt_rand(1900,2100).'-'.mt_rand(1,12).'-'.mt_rand(1,12)),'duration'=>mt_rand(60,220),'poster'=>'https://picsum.photos/id/'.mt_rand(1,500).'/200/300','rating'=>mt_rand(1,5)),
+            array('type'=>'Film','title'=>'Un flic','release_date'=>new DateTime(mt_rand(1900,2100).'-'.mt_rand(1,12).'-'.mt_rand(1,12)),'duration'=>mt_rand(60,220),'poster'=>'https://picsum.photos/id/'.mt_rand(1,500).'/200/300','rating'=>mt_rand(1,5)),
+            array('type'=>'Série','title'=>'La casa de papel','release_date'=>new DateTime(mt_rand(1900,2100).'-'.mt_rand(1,12).'-'.mt_rand(1,12)),'duration'=>mt_rand(60,220),'poster'=>'https://picsum.photos/id/'.mt_rand(1,500).'/200/300','rating'=>mt_rand(1,5)),
+            array('type'=>'Série','title'=>'Narco','release_date'=>new DateTime(mt_rand(1900,2100).'-'.mt_rand(1,12).'-'.mt_rand(1,12)),'duration'=>mt_rand(60,220),'poster'=>'https://picsum.photos/id/'.mt_rand(1,500).'/200/300','rating'=>mt_rand(1,5)),
         );
+
+        $genreList = [];
+        // insertion des genres en BDD
+        foreach($genre_array as $this_genre_name){
+            $genre = new Genre();
+            $genre->setName($this_genre_name);
+            $manager->persist($genre);
+            $genreList[] = $genre;
+        }
+
         // on rentre les films en BDD. Utile pour initialisé l'objet movie par la suite. On pourrait tout créer dans la même boucle, je préfère par étape c'est plus clair. Et c'est pas comme si il y avait beaucoup de donnée
+        $movieList = [];
+        $i = 0;
         foreach($movie_array as $this_movie_array) {
             $movie = new Movie();
             shuffle($synopsis_array);
@@ -68,45 +80,43 @@ class AppFixtures extends Fixture
             $movie->setReleaseDate($this_movie_array['release_date']);
             $movie->setPoster($this_movie_array['poster']);
             $movie->setRating($this_movie_array['rating']);
-            $manager->persist($movie);
-        }
-        $manager->flush();
 
+            // genre
+            shuffle($genreList);
+            foreach ($genreList as $this_genre) {
+                $movie->addGenres($this_genre);
+                if ($i%mt_rand(1, 7) == 0) {
+                    // pour ne pas avoir toujours le même nombre de genre dans un film
+                    break;
+                }
+            }
+            $manager->persist($movie);
+            $movieList[] = $movie;
+            $i++;
+        }
+        
+        $personList = [];
         // insertion des personnes (acteur) en BDD
         foreach($person_array as $this_person_array){
             $person = new Person();
             $person->setFirstname($this_person_array[0]);
             $person->setLastname($this_person_array[1]);
             $manager->persist($person);
+            $personList[] = $person;
         }
-        $manager->flush();
-  
-        // insertion des genres en BDD
-        foreach($genre_array as $this_genre_name){
-            $genre = new Genre();
-            $genre->setName($this_genre_name);
-            $manager->persist($genre);
-        }
-        $manager->flush();
-              
-
-        // maintenant que tout est créé, on fait les associations : Saison, Casting et Genre
-        foreach ($movie_array as $this_movie_array) {
+        
+        // maintenant que tout est créé, on fait les associations : Saison, Casting
+        foreach ($movieList as $this_movie_object) {
             shuffle($role_array);
-            $MovieRepository = $manager->getRepository(Movie::class);
-            $movie = $MovieRepository->findOneBy(['title'=>$this_movie_array['title']]);
+            shuffle($personList);
             $i=1;
             foreach ($role_array as $this_role_name) {
                 $casting = new Casting();
                 $casting->setCreditOrder($i);
                 $casting->setRole($this_role_name);
                 
-                $PersonRepository = $manager->getRepository(Person::class);
-                $person = $PersonRepository->findAll()[mt_rand(0,6)];
-                
-
-                $casting->setMovie($movie);
-                $casting->setPerson($person);
+                $casting->setMovie($this_movie_object);
+                $casting->setPerson($personList[mt_rand(0, 6)]);
 
                 $manager->persist($casting);
                 $i++;
@@ -116,26 +126,13 @@ class AppFixtures extends Fixture
                 }
             }
 
-            // genre
-            $GenreRepository = $manager->getRepository(Genre::class);
-            $genreList = $GenreRepository->findAll();
-            shuffle($genreList);
-            foreach ($genreList as $this_genre) {
-                $movie->addGenre($this_genre);
-                if ($i%mt_rand(1, 7) == 0) {
-                    // pour ne pas avoir toujours le même nombre de genre dans un film
-                    break;
-                }
-            }
-            $manager->persist($movie);
-
             //saison
-            if ($this_movie_array['type'] == 'Série') {
+            if ($this_movie_object->getType() != 'Film') {
                 for ($i=1;$i<20;$i++) {
                     $season = new Season();
                     $season->setNumber($i);
                     $season->setEpisodesNumber(mt_rand(2, 10));
-                    $season->SetMovie($movie);
+                    $season->SetMovie($this_movie_object);
                     $manager->persist($season);
                     if ($i%mt_rand(1, 20) == 0) {
                         // pour ne pas avoir toujours le même nombre de saison pour les séries
@@ -143,7 +140,7 @@ class AppFixtures extends Fixture
                     }
                 }
             }
-            $manager->flush();
         }
+        $manager->flush();
     }
 }
