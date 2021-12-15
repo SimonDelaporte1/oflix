@@ -2,59 +2,41 @@
 
 namespace App\DataFixtures;
 
-use DateTime;
+use Faker\Factory;
 use App\Entity\Genre;
 use App\Entity\Movie;
 use App\Entity\Person;
-use App\Entity\Casting;
 use App\Entity\Season;
+use App\Entity\Casting;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Faker\Provider\RoleProvider;
 
 class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        $person_array = array(
-            array('Brad', 'Pitt'),
-            array('Tom', 'Hanks'),
-            array('Tom', 'Cruise'),
-            array('Alain', 'Delon'),
-            array('Emilia', 'Clarke'),
-            array('Catherine', 'Deneuve'),
-            array('Margot', 'Robbie'),
-        );
-        $role_array = array(
-           'Le bon',
-            'La brute',
-            'Le truant',
-            'La personne mystere',
-            'Le réverbère',
-            'Doublure',
-            'Figurant'
-        );
-        $genre_array = array(
-            'Sci-fi',
-            'Comédie',
-            'Drame',
-            'Pénible',
-            'Mal joué',
-            'Epique'
-        );
-        $synopsis_array = array('Lorem', 'ipsum', 'dolor', 'sit', 'amet', 'bla', 'bli', 'je', 'mange', 'des', 'légumes', 'avec', 'de', 'la', 'soupe');
-        $summary_array = array('Ceci', 'est', 'une', 'description', 'courte', 'du', 'film', 'que', 'vous', 'allez', 'voir', 'consectetur', 'adipiscing','elit.','Proin','et','aliquet','nibh.','ed','nec','velit','vel','lacus','posuere','dignissim.','Nunc','gravida','auctor','dapibus.','Nulla','faucibus','justo','in','accumsan','laoreet.','Suspendisse','quis','lacinia','tortor.','Cras','auctor','lorem','eget','efficitur','tincidunt.','Vestibulum','ac','eleifend','lectus.','Cras','fringilla','felis','nec','posuere','feugiat.');
+        $faker = Factory::create();
+        $faker->addProvider(new \Faker\Provider\RoleProvider($faker));
+        $faker->addProvider(new \Faker\Provider\GenreProvider($faker));
+        $faker->addProvider(new \Faker\Provider\MovieProvider($faker));
+        $person_array = [];
+        $role_array = [];
+        $genre_array = [];
+        $movie_array = [];
+        for ($i = 0; $i < 7; $i++) {
+            $person_array[] = [$faker->firstName(), $faker->name()];
+        }
+        for ($i = 0; $i < 7; $i++) {
+            $role_array[] = $faker->getRole();
+        }
+        for ($i = 0; $i < 7; $i++) {
+            $genre_array[] = $faker->getGenre();
+        }
+        for ($i = 0; $i < 8; $i++) {
+            $movie_array[] = $faker->getMovie();
+        }
 
-        // summary et synopsis seront ajouté au dernier moment, pour faire un shuffle sur ces tableaux à chaque itération
-        $movie_array = array(
-            array('type'=>'Film','title'=>'L’Attaque de la Moussaka géante','release_date'=>new DateTime(mt_rand(1900,2100).'-'.mt_rand(1,12).'-'.mt_rand(1,12)),'duration'=>mt_rand(60,220),'poster'=>'https://picsum.photos/id/'.mt_rand(1,500).'/200/300','rating'=>mt_rand(1,5)),
-            array('type'=>'Série','title'=>'Game of throne','release_date'=>new DateTime(mt_rand(1900,2100).'-'.mt_rand(1,12).'-'.mt_rand(1,12)),'duration'=>mt_rand(60,220),'poster'=>'https://picsum.photos/id/'.mt_rand(1,500).'/200/300','rating'=>mt_rand(1,5)),
-            array('type'=>'Film','title'=>'100 000 dollars au soleil','release_date'=>new DateTime(mt_rand(1900,2100).'-'.mt_rand(1,12).'-'.mt_rand(1,12)),'duration'=>mt_rand(60,220),'poster'=>'https://picsum.photos/id/'.mt_rand(1,500).'/200/300','rating'=>mt_rand(1,5)),
-            array('type'=>'Film','title'=>'Jack Reacher','release_date'=>new DateTime(mt_rand(1900,2100).'-'.mt_rand(1,12).'-'.mt_rand(1,12)),'duration'=>mt_rand(60,220),'poster'=>'https://picsum.photos/id/'.mt_rand(1,500).'/200/300','rating'=>mt_rand(1,5)),
-            array('type'=>'Film','title'=>'Suicide squad','release_date'=>new DateTime(mt_rand(1900,2100).'-'.mt_rand(1,12).'-'.mt_rand(1,12)),'duration'=>mt_rand(60,220),'poster'=>'https://picsum.photos/id/'.mt_rand(1,500).'/200/300','rating'=>mt_rand(1,5)),
-            array('type'=>'Film','title'=>'Un flic','release_date'=>new DateTime(mt_rand(1900,2100).'-'.mt_rand(1,12).'-'.mt_rand(1,12)),'duration'=>mt_rand(60,220),'poster'=>'https://picsum.photos/id/'.mt_rand(1,500).'/200/300','rating'=>mt_rand(1,5)),
-            array('type'=>'Série','title'=>'La casa de papel','release_date'=>new DateTime(mt_rand(1900,2100).'-'.mt_rand(1,12).'-'.mt_rand(1,12)),'duration'=>mt_rand(60,220),'poster'=>'https://picsum.photos/id/'.mt_rand(1,500).'/200/300','rating'=>mt_rand(1,5)),
-            array('type'=>'Série','title'=>'Narco','release_date'=>new DateTime(mt_rand(1900,2100).'-'.mt_rand(1,12).'-'.mt_rand(1,12)),'duration'=>mt_rand(60,220),'poster'=>'https://picsum.photos/id/'.mt_rand(1,500).'/200/300','rating'=>mt_rand(1,5)),
-        );
 
         $genreList = [];
         // insertion des genres en BDD
@@ -70,10 +52,8 @@ class AppFixtures extends Fixture
         $i = 0;
         foreach($movie_array as $this_movie_array) {
             $movie = new Movie();
-            shuffle($synopsis_array);
-            shuffle($summary_array);
-            $movie->setSummary(implode(' ', $summary_array));
-            $movie->setSynopsis(implode(' ', $synopsis_array));
+            $movie->setSummary($this_movie_array['summary']);
+            $movie->setSynopsis($this_movie_array['synopsis']);
             $movie->setDuration($this_movie_array['duration']);
             $movie->setType($this_movie_array['type']);
             $movie->setTitle($this_movie_array['title']);
@@ -94,7 +74,7 @@ class AppFixtures extends Fixture
             $movieList[] = $movie;
             $i++;
         }
-        
+
         $personList = [];
         // insertion des personnes (acteur) en BDD
         foreach($person_array as $this_person_array){
@@ -104,7 +84,7 @@ class AppFixtures extends Fixture
             $manager->persist($person);
             $personList[] = $person;
         }
-        
+
         // maintenant que tout est créé, on fait les associations : Saison, Casting
         foreach ($movieList as $this_movie_object) {
             shuffle($role_array);
@@ -116,7 +96,7 @@ class AppFixtures extends Fixture
                 $casting->setRole($this_role_name);
                 
                 $casting->setMovie($this_movie_object);
-                $casting->setPerson($personList[mt_rand(0, 6)]);
+                $casting->setPerson($personList[$i]);
 
                 $manager->persist($casting);
                 $i++;

@@ -56,7 +56,7 @@
                     </p>
                     <div class="d-flex" style="color: orange;">
                         {% set k = movie.rating %}
-                        {% for i in range(1, movie.rating) %}
+                        {% for i in range(1, movie.rating|round(0, 'floor')) %}
                             <i class="bi bi-star-fill"></i>
                             {% set k = k-1 %}
                         {% endfor %}

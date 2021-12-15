@@ -31,7 +31,7 @@
                     <p>{{ this_movie_info.synopsis }}</p>
                     <div class="d-flex" style="color: orange;">
                         {% set k = this_movie_info.rating %}
-                        {% for i in range(1, this_movie_info.rating) %}
+                        {% for i in range(1, this_movie_info.rating|round(0, 'floor')) %}
                             <i class="bi bi-star-fill"></i>
                             {% set k = k-1 %}
                         {% endfor %}
