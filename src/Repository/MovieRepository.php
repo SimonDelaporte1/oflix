@@ -19,6 +19,38 @@ class MovieRepository extends ServiceEntityRepository
         parent::__construct($registry, Movie::class);
     }
 
+    /**
+     * 
+     * Liste des films par ordre alpha
+     *
+     * @return void
+     */
+    public function findAllOrderedByTitleAscDql()
+    {
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQuery(
+            'SELECT m
+            FROM App\Entity\Movie m
+            ORDER BY m.duration ASC'
+        );
+
+        // returns an array of Movie objects
+        return $query->getResult();
+    }
+
+    /**
+     * Liste des films par ordre alpha
+     * en Query Builder
+     */
+    public function findAllOrderedByTitleAscQb()
+    {
+        return $this->createQueryBuilder('m')
+            ->orderBy('m.duration', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
     // /**
     //  * @return Movie[] Returns an array of Movie objects
     //  */

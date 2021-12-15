@@ -52,7 +52,7 @@ Class MainController extends AbstractController
     public function list(MovieRepository $MovieRepository)
     {
         // on rend un template twig à partir du dossier templates/
-        $moviesList = $MovieRepository->findAll();
+        $moviesList = $MovieRepository->findAllOrderedByTitleAscQb();
         return $this->render('main/movieList.html.twig', [
             'moviesList' => $moviesList
         ]);
