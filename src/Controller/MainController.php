@@ -3,10 +3,14 @@
 namespace App\Controller;
 
 use App\Entity\Movie;
-use App\Repository\CastingRepository;
+use App\Entity\Review;
+use App\Form\ReviewType;
 use App\Repository\GenreRepository;
-use App\Repository\MovieRepository;
 // un use est nécessaire pour les @route
+use App\Repository\MovieRepository;
+use App\Repository\CastingRepository;
+use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -14,6 +18,42 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 Class MainController extends AbstractController
 {
+
+    /** 
+     * @Route("/movie/review/{id}", name="review", methods={"GET", "POST"})
+     */
+    public function review(int $id, MovieRepository $MovieRepository,  ManagerRegistry $doctrine, Request $request)
+    {
+        $review = new Review();
+        $form = $this->createForm(ReviewType::class, $review);
+
+        // Le Form inspecte la Requête
+        $form->handleRequest($request);
+
+        // Si le form a été soumis et qu'il est valide
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this_movie_info = $MovieRepository->find($id);
+            $review->setMovie($this_movie_info);
+            // On va faire appel au Manager de Doctrine
+            $entityManager = $doctrine->getManager();
+            // Prépare-toi à "persister" notre objet (req. INSERT INTO)
+            $entityManager->persist($review);
+
+            // On exécute les requêtes SQL
+            $entityManager->flush();
+
+            //dd($post);
+
+            // On redirige vers la liste
+            return $this->redirectToRoute('main_movie_show', ['id' => $review->getId()]);
+        }
+
+        // Sinon on affiche le formulaire
+        return $this->render('main/review.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+    
     /** 
      * @Route("/", name="main_home")
      */
@@ -87,4 +127,5 @@ Class MainController extends AbstractController
 
         // puis dans le template base.html.twig on conditionnera le CSS de la nav selon le theme choisi
     }
+
 }

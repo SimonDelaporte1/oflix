@@ -60,7 +60,7 @@
                         <dt class="col-sm-12">Année</dt>
                         <dd class="col-sm-12">{{ this_movie_info.releaseDate|date('d-m-Y') }}</dd>
                     </dl>
-
+                    <a href="{{ path('review', {id: this_movie_info.id}) }}" class="btn btn-primary">Déposer un avis</a>
                 </div>
             </div>
 
