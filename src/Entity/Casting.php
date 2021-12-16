@@ -29,11 +29,15 @@ class Casting
 
     /**
      * @ORM\ManyToOne(targetEntity=Person::class, inversedBy="castings")
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     * 
      */
     private $person;
 
     /**
      * @ORM\ManyToOne(targetEntity=Movie::class, inversedBy="castings")
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     * 
      */
     private $movie;
 

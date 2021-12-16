@@ -8,15 +8,49 @@ use App\Entity\Movie;
 use App\Entity\Person;
 use App\Entity\Season;
 use App\Entity\Casting;
+use Faker\Provider\RoleProvider;
+use Doctrine\DBAL\Connection;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Faker\Provider\RoleProvider;
 
 class AppFixtures extends Fixture
 {
+
+    private $connection;
+
+    public function __construct(Connection $connection)
+    {
+        $this->connection = $connection;
+    }
+
+    /**
+     * Permet de TRUNCATE les tables et de remettre les AI à 1
+     */
+    private function truncate()
+    {
+        // On passe en mode SQL ! On cause avec MySQL
+        // Désactivation des contraintes FK
+        $this->connection->executeQuery('SET foreign_key_checks = 0');
+        // On tronque
+        $this->connection->executeQuery('TRUNCATE TABLE casting');
+        $this->connection->executeQuery('TRUNCATE TABLE genre');
+        $this->connection->executeQuery('TRUNCATE TABLE movie');
+        $this->connection->executeQuery('TRUNCATE TABLE movie_genre');
+        $this->connection->executeQuery('TRUNCATE TABLE person');
+        $this->connection->executeQuery('TRUNCATE TABLE season');
+        // etc.
+    }
+
     public function load(ObjectManager $manager): void
     {
+        // On TRUNCATE manuellement
+        $this->truncate();
+        
         $faker = Factory::create('fr_FR');
+
+        // pour avoir toujours les mêmes données
+        $faker->seed(2021);
+
         $faker->addProvider(new \Faker\Provider\RoleProvider($faker));
         $faker->addProvider(new \Faker\Provider\GenreProvider($faker));
         $faker->addProvider(new \Faker\Provider\MovieProvider($faker));
