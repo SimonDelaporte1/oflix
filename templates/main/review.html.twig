@@ -2,6 +2,7 @@
 
 {% block body %}
 <h1>Poster votre avis</h1>
+<div class="container">
 {{ form_start(form, {attr: {novalidate: 'novalidate'}}) }}
 
     {{ form_widget(form) }}
@@ -10,4 +11,5 @@
     <br /><br /><br />
 
 {{ form_end(form) }}
+</div>
 {% endblock %}
