@@ -45,7 +45,7 @@ Class MainController extends AbstractController
             //dd($post);
 
             // On redirige vers la liste
-            return $this->redirectToRoute('main_movie_show', ['id' => $review->getId()]);
+            return $this->redirectToRoute('main_movie_show', ['id' => $id]);
         }
 
         // Sinon on affiche le formulaire

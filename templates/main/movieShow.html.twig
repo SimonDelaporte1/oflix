@@ -68,6 +68,19 @@
 
     </div>
 
+    <h3>Liste des avis</h3>
+    <table>
+    {% for review in this_movie_info.reviews %}
+            <tr>
+                <td>{{ review.WatchedAt|date('d-m-Y') }}</td>
+                <td>{{ review.Username }}</td>
+                <td>{{ review.Email }}</td>
+                <td>{{ review.Content }}</td>
+                <td>{{ review.Rating }}</td>
+                <td>{{ review.Reactions|join(' / ') }}</td>
+            </tr>
+    {% endfor %}
+  </table>
 </div>
 
 {% endblock %}
