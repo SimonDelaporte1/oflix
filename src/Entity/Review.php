@@ -2,8 +2,9 @@
 
 namespace App\Entity;
 
-use App\Repository\ReviewRepository;
+use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ReviewRepository;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -64,7 +65,11 @@ class Review
      * @ORM\ManyToOne(targetEntity=Movie::class, inversedBy="reviews")
      */
     private $movie;
-
+    
+    public function __construct()
+    {
+        $this->watchedAt = new DateTimeImmutable();
+    }
     public function getId(): ?int
     {
         return $this->id;

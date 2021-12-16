@@ -1,12 +1,13 @@
 {% extends "base.html.twig" %}
 
 {% block body %}
-Poster votre avis : 
+<h1>Poster votre avis</h1>
 {{ form_start(form, {attr: {novalidate: 'novalidate'}}) }}
 
     {{ form_widget(form) }}
 
     <button type="submit" class="btn btn-success">Enregistrer</button>
+    <br /><br /><br />
 
 {{ form_end(form) }}
 {% endblock %}
