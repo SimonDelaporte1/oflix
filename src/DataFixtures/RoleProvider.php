@@ -15,6 +15,6 @@ class RoleProvider extends \Faker\Provider\Base
     );
     public function getRole()
     {
-        return $this->role_array[mt_rand(0, count($this->role_array)-1)];
+        return $this->role_array[array_rand($this->role_array)];
     }
 }

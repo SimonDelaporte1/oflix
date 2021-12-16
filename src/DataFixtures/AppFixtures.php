@@ -16,7 +16,7 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        $faker = Factory::create();
+        $faker = Factory::create('fr_FR');
         $faker->addProvider(new \Faker\Provider\RoleProvider($faker));
         $faker->addProvider(new \Faker\Provider\GenreProvider($faker));
         $faker->addProvider(new \Faker\Provider\MovieProvider($faker));
@@ -24,7 +24,7 @@ class AppFixtures extends Fixture
         $role_array = [];
         $genre_array = [];
         $movie_array = [];
-        for ($i = 0; $i < 7; $i++) {
+        for ($i = 0; $i < 8; $i++) {
             $person_array[] = [$faker->firstName(), $faker->name()];
         }
         for ($i = 0; $i < 7; $i++) {
@@ -108,16 +108,12 @@ class AppFixtures extends Fixture
 
             //saison
             if ($this_movie_object->getType() != 'Film') {
-                for ($i=1;$i<20;$i++) {
+                for ($i=1;$i<mt_rand(3, 8);$i++) {
                     $season = new Season();
                     $season->setNumber($i);
                     $season->setEpisodesNumber(mt_rand(2, 10));
                     $season->SetMovie($this_movie_object);
                     $manager->persist($season);
-                    if ($i%mt_rand(1, 20) == 0) {
-                        // pour ne pas avoir toujours le même nombre de saison pour les séries
-                        break;
-                    }
                 }
             }
         }
