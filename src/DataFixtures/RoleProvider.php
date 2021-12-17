@@ -1,6 +1,6 @@
 <?php
 
-namespace Faker\Provider;
+namespace App\DataFixtures;
 
 class RoleProvider extends \Faker\Provider\Base
 {

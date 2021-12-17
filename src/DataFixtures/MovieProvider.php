@@ -1,6 +1,6 @@
 <?php
 
-namespace Faker\Provider;
+namespace App\DataFixtures;
 class MovieProvider extends \Faker\Provider\Base
 {
     public function getMovie()
