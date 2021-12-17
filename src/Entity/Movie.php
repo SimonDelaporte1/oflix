@@ -77,7 +77,7 @@ class Movie
     private $duration;
 
     /**
-     * @ORM\OneToMany(targetEntity=Review::class, mappedBy="movie")
+     * @ORM\OneToMany(targetEntity=Review::class, mappedBy="movie", orphanRemoval=true)
      */
     private $reviews;
 

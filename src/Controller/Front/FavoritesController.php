@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Front;
 
 use App\Model\Movies;
 use App\Repository\MovieRepository;
@@ -16,7 +16,7 @@ class FavoritesController extends AbstractController
     {
         // on rend un template twig à partir du dossier templates/
         $moviesList = $MovieRepository->findAll();
-        return $this->render('favorites/list.html.twig', [
+        return $this->render('front/favorites/list.html.twig', [
             'moviesList' => $moviesList
         ]);
     }

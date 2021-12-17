@@ -19,7 +19,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 Class MainController extends AbstractController
 {
     /** 
-     * @Route("/movie/review/{id<\d+>}", name="review", methods={"GET", "POST"})
+     * @Route("/movie/review/{id<\d+>}", name="main_movie_review_add", methods={"GET", "POST"})
      */
     public function review(int $id, Movie $movie, ManagerRegistry $doctrine, Request $request)
     {
@@ -47,7 +47,7 @@ Class MainController extends AbstractController
         }
 
         // Sinon on affiche le formulaire
-        return $this->renderForm('main/review.html.twig', [
+        return $this->renderForm('front/main/review.html.twig', [
             'form' => $form,
             'movie' => $movie,
         ]);
@@ -61,7 +61,7 @@ Class MainController extends AbstractController
         // on rend un template twig à partir du dossier templates/
         $moviesList = $MovieRepository->findAllOrderedByDateAscQb();
         $genreList = $GenreRepository->findAll();
-        return $this->render('main/home.html.twig', [
+        return $this->render('front/main/home.html.twig', [
             'moviesList' => $moviesList,
             'genreList' => $genreList
         ]);
@@ -80,7 +80,7 @@ Class MainController extends AbstractController
         }
         $casting = $CastingRepository->findAllJoinedToCastingQb($id);
         // dd($this_movie_info);
-        return $this->render('main/movieShow.html.twig', [
+        return $this->render('front/main/movieShow.html.twig', [
             'this_movie_info' => $this_movie_info,
             'casting' => $casting
         ]);
@@ -94,7 +94,7 @@ Class MainController extends AbstractController
     {
         // on rend un template twig à partir du dossier templates/
         $moviesList = $MovieRepository->findAllOrderedByTitleAscQb();
-        return $this->render('main/movieList.html.twig', [
+        return $this->render('front/main/movieList.html.twig', [
             'moviesList' => $moviesList
         ]);
     }
