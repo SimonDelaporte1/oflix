@@ -7,12 +7,13 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\RadioType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class ReviewType extends AbstractType
 {
@@ -42,7 +43,6 @@ class ReviewType extends AbstractType
                 ],
             ])
             ->add('reactions', ChoiceType::class, [
-                'required' => true,
                 'multiple' => true,
                 'expanded' => true,
                 'choices'  => [
@@ -52,8 +52,9 @@ class ReviewType extends AbstractType
                   'Dormir' => 'sleep',
                   'Rêver' => 'dream', 
                 ],
+                'label' => 'Ce film vous a fait...',
             ])
-            ->add('watchedAt', DateTimeType::class, [
+            ->add('watchedAt', DateType::class, [
                 'input' => 'datetime_immutable',
                 'label' => 'Vous avez vu ce film le ',
             ])

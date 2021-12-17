@@ -18,11 +18,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 Class MainController extends AbstractController
 {
-
     /** 
-     * @Route("/movie/review/{id}", name="review", methods={"GET", "POST"})
+     * @Route("/movie/review/{id<\d+>}", name="review", methods={"GET", "POST"})
      */
-    public function review(int $id, MovieRepository $MovieRepository,  ManagerRegistry $doctrine, Request $request)
+    public function review(int $id, Movie $movie, ManagerRegistry $doctrine, Request $request)
     {
         $review = new Review();
         $form = $this->createForm(ReviewType::class, $review);
@@ -32,8 +31,7 @@ Class MainController extends AbstractController
 
         // Si le form a été soumis et qu'il est valide
         if ($form->isSubmitted() && $form->isValid()) {
-            $this_movie_info = $MovieRepository->find($id);
-            $review->setMovie($this_movie_info);
+            $review->setMovie($movie);
             // On va faire appel au Manager de Doctrine
             $entityManager = $doctrine->getManager();
             // Prépare-toi à "persister" notre objet (req. INSERT INTO)
@@ -45,12 +43,13 @@ Class MainController extends AbstractController
             //dd($post);
 
             // On redirige vers la liste
-            return $this->redirectToRoute('main_movie_show', ['id' => $id]);
+            return $this->redirectToRoute('main_movie_show', ['id' => $movie->getId()]);
         }
 
         // Sinon on affiche le formulaire
-        return $this->render('main/review.html.twig', [
-            'form' => $form->createView(),
+        return $this->renderForm('main/review.html.twig', [
+            'form' => $form,
+            'movie' => $movie,
         ]);
     }
     
@@ -100,8 +99,6 @@ Class MainController extends AbstractController
         ]);
     }
 
-    
-
     /** 
      * 
      * theme switcher
@@ -127,5 +124,4 @@ Class MainController extends AbstractController
 
         // puis dans le template base.html.twig on conditionnera le CSS de la nav selon le theme choisi
     }
-
 }

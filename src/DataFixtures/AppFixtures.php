@@ -8,8 +8,12 @@ use App\Entity\Movie;
 use App\Entity\Person;
 use App\Entity\Season;
 use App\Entity\Casting;
-use Faker\Provider\RoleProvider;
 use Doctrine\DBAL\Connection;
+
+use Faker\Provider\RoleProvider;
+use Faker\Provider\GenreProvider;
+use Faker\Provider\MovieProvider;
+
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 
@@ -49,11 +53,11 @@ class AppFixtures extends Fixture
         $faker = Factory::create('fr_FR');
 
         // pour avoir toujours les mêmes données
-        $faker->seed(2021);
+        // $faker->seed(2021);
 
-        $faker->addProvider(new \Faker\Provider\RoleProvider($faker));
-        $faker->addProvider(new \Faker\Provider\GenreProvider($faker));
-        $faker->addProvider(new \Faker\Provider\MovieProvider($faker));
+        $faker->addProvider(new RoleProvider($faker));
+        $faker->addProvider(new GenreProvider($faker));
+        $faker->addProvider(new MovieProvider($faker));
         $person_array = [];
         $role_array = [];
         $genre_array = [];

@@ -39,7 +39,7 @@ class Review
      * @ORM\Column(type="text")
      * @Assert\NotBlank
      * @Assert\Length(
-     *      min = 100,
+     *      min = 10,
      *      minMessage = "Vous devez remplir au moins 100 caractères",
      * )
      */
