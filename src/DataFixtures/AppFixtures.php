@@ -63,7 +63,7 @@ class AppFixtures extends Fixture
         $genre_array = [];
         $movie_array = [];
         for ($i = 0; $i < 8; $i++) {
-            $person_array[] = [$faker->firstName(), $faker->name()];
+            $person_array[] = [$faker->firstName(), $faker->lastName()];
         }
         for ($i = 0; $i < 7; $i++) {
             $role_array[] = $faker->getRole();

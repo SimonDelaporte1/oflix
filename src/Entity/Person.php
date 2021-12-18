@@ -97,4 +97,8 @@ class Person
 
         return $this;
     }
+    public function getPersonFullName()
+    {
+        return $this->firstname .' '. $this->lastname;
+    }
 }

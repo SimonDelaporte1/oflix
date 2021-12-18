@@ -38,6 +38,9 @@ class SeasonController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($season);
             $entityManager->flush();
+            $this->addFlash(
+                'success', 'Saison créé'
+            );
 
             return $this->redirectToRoute('back_season_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -49,7 +52,7 @@ class SeasonController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="back_season_show", methods={"GET"})
+     * @Route("/{id}", name="back_season_show", methods={"GET"}, requirements={"id"="\d+"})
      */
     public function show(Season $season): Response
     {
@@ -59,7 +62,7 @@ class SeasonController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="back_season_edit", methods={"GET", "POST"})
+     * @Route("/{id}/edit", name="back_season_edit", methods={"GET", "POST"}, requirements={"id"="\d+"})
      */
     public function edit(Request $request, Season $season, EntityManagerInterface $entityManager): Response
     {
@@ -69,6 +72,9 @@ class SeasonController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
+            $this->addFlash(
+                'success', 'Saison modifié'
+            );
             return $this->redirectToRoute('back_season_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -79,13 +85,16 @@ class SeasonController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="back_season_delete", methods={"POST"})
+     * @Route("/{id}", name="back_season_delete", methods={"POST"}, requirements={"id"="\d+"})
      */
     public function delete(Request $request, Season $season, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$season->getId(), $request->request->get('_token'))) {
             $entityManager->remove($season);
             $entityManager->flush();
+            $this->addFlash(
+                'success', 'Saison supprimé'
+            );
         }
 
         return $this->redirectToRoute('back_season_index', [], Response::HTTP_SEE_OTHER);

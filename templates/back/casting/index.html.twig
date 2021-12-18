@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Casting index{% endblock %}
+
+{% block body %}
+    <h1>Casting index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Role</th>
+                <th>Ordre d'apparition</th>
+                <th>Acteur</th>
+                <th>Film</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for casting in castings %}
+            <tr>
+                <td>{{ casting.id }}</td>
+                <td>{{ casting.role }}</td>
+                <td>{{ casting.creditOrder }}</td>
+                <td>{{ casting.person.PersonFullName }}</td>
+                <td>{{ casting.movie.title }}</td>
+                <td>
+                    <a class="btn btn-primary" href="{{ path('back_casting_show', {'id': casting.id}) }}">Voir</a>
+                    <a class="btn btn-primary" href="{{ path('back_casting_edit', {'id': casting.id}) }}">Modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">Pas de casting trouvé</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn btn-primary" href="{{ path('back_casting_new') }}">Créer un nouveau casting</a>
+{% endblock %}
