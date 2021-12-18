@@ -51,23 +51,29 @@ class MovieController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="back_movie_show", methods={"GET"})
+     * @Route("/{id}", name="back_movie_show", methods={"GET"}, requirements={"id"="\d+"})
      */
     public function show(Movie $movie): Response
     {
+        if ($movie === null) {
+            throw $this->createNotFoundException('Film non trouvé.');
+        }
         return $this->render('back/movie/show.html.twig', [
             'movie' => $movie,
         ]);
     }
 
     /**
-     * @Route("/{id}/edit", name="back_movie_edit", methods={"GET", "POST"})
+     * @Route("/{id}/edit", name="back_movie_edit", methods={"GET", "POST"}, requirements={"id"="\d+"})
      */
     public function edit(Request $request, Movie $movie, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(MovieType::class, $movie);
         $form->handleRequest($request);
 
+        if ($movie === null) {
+            throw $this->createNotFoundException('Film non trouvé.');
+        }
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
@@ -84,10 +90,13 @@ class MovieController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="back_movie_delete", methods={"POST"})
+     * @Route("/{id}", name="back_movie_delete", methods={"POST"}, requirements={"id"="\d+"})
      */
     public function delete(Request $request, Movie $movie, EntityManagerInterface $entityManager): Response
     {
+        if ($movie === null) {
+            throw $this->createNotFoundException('Film non trouvé.');
+        }
         if ($this->isCsrfTokenValid('delete'.$movie->getId(), $request->request->get('_token'))) {
 
             $this->addFlash(
