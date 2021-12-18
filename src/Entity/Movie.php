@@ -2,10 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\MovieRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\MovieRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=MovieRepository::class)
@@ -21,16 +23,19 @@ class Movie
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      */
     private $title;
 
     /**
      * @ORM\Column(type="string", length=20)
+     * @Assert\NotBlank
      */
     private $type;
 
     /**
      * @ORM\Column(type="date", nullable=true)
+     * @Assert\NotBlank
      */
     private $releaseDate;
 
@@ -53,11 +58,17 @@ class Movie
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Assert\NotBlank
      */
     private $summary;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *      min = 10,
+     *      minMessage = "Vous devez remplir au moins 10 caractères",
+     * )
      */
     private $synopsis;
 
@@ -83,6 +94,7 @@ class Movie
 
     public function __construct()
     {
+        $this->releaseDate = new DateTime();
         $this->seasons = new ArrayCollection();
         $this->castings = new ArrayCollection();
         $this->genres = new ArrayCollection();

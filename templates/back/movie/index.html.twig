@@ -1,38 +1,40 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Movie index{% endblock %}
+{% block title %}Liste des films{% endblock %}
 
 {% block body %}
-    <h1>Movie index</h1>
+<div class="container">
+    <h1>Liste des films</h1>
 
-    <a href="{{ path('back_movie_new') }}">Create new</a>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Type</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for movie in movies %}
-            <tr>
-                <td>{{ movie.id }}</td>
-                <td>{{ movie.title }}</td>
-                <td>{{ movie.type }}</td>
-                <td>
-                    <a href="{{ path('back_movie_show', {'id': movie.id}) }}">show</a>
-                    <a href="{{ path('back_movie_edit', {'id': movie.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="10">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
+    <a  class="btn btn-primary" href="{{ path('back_movie_new') }}">Créer un nouveau film</a>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Title</th>
+                    <th>Image</th>
+                    <th>Type</th>
+                    <th>actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for movie in movies %}
+                <tr>
+                    <td>{{ movie.id }}</td>
+                    <td>{{ movie.title }}</td>
+                    <td><img src="{{ movie.poster }}" width="50" /></td>
+                    <td>{{ movie.type }}</td>
+                    <td>
+                        <a class="btn btn-primary" href="{{ path('back_movie_show', {'id': movie.id}) }}">Voir</a>
+                        <a class="btn btn-primary" href="{{ path('back_movie_edit', {'id': movie.id}) }}">Modifier</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="10">Pas de film trouvé</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}

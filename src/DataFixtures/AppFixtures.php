@@ -10,9 +10,9 @@ use App\Entity\Season;
 use App\Entity\Casting;
 use Doctrine\DBAL\Connection;
 
-use Faker\Provider\RoleProvider;
-use Faker\Provider\GenreProvider;
-use Faker\Provider\MovieProvider;
+use App\DataFixtures\RoleProvider;
+use App\DataFixtures\GenreProvider;
+use App\DataFixtures\MovieProvider;
 
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
