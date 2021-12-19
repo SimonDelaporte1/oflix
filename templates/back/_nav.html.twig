@@ -1,0 +1,35 @@
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="padding-left:20px;">
+        <span style="color: white;">Administrer : </span>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle {% if nav_active == 'movie_index' or nav_active == 'movie_new'  %}active{% endif %}" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                    <span>Film</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="nav-item"><a class="dropdown-item {% if nav_active == 'movie_index' %}active{% endif %}"  href="{{ path('back_movie_index') }}">Liste</a></li>
+                    <li class="nav-item"><a class="dropdown-item {% if nav_active == 'movie_new' %}active{% endif %}" href="{{ path('back_movie_new') }}">Créer</a></li>
+                </ul>
+            </li>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle {% if nav_active == 'season_index' or nav_active == 'season_new'  %}active{% endif %}" href="#" id="navbarDropdown2" role="button" data-bs-toggle="dropdown">
+                    <span>Saison</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="nav-item"><a class="dropdown-item {% if nav_active == 'season_index' %}active{% endif %}" href="{{ path('back_season_index') }}">Liste</a></li>
+                    <li class="nav-item"><a class="dropdown-item {% if nav_active == 'season_new' %}active{% endif %}" href="{{ path('back_season_new') }}">Créer</a></li>
+                </ul>
+            </li>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle {% if nav_active == 'casting_index' or nav_active == 'casting_new'  %}active{% endif %}" href="#" id="navbarDropdown3" role="button" data-bs-toggle="dropdown">
+                    <span>Casting</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="nav-item"><a class="dropdown-item {% if nav_active == 'casting_index' %}active{% endif %}" href="{{ path('back_casting_index') }}">Liste</a></li>
+                    <li class="nav-item"><a class="dropdown-item {% if nav_active == 'casting_new' %}active{% endif %}" href="{{ path('back_casting_new') }}">Créer</a></li>
+                </ul>
+            </li>
+
+        </ul>
+    </nav>
