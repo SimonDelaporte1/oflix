@@ -1,13 +1,12 @@
-{% extends 'base.html.twig' %}
-
+{% extends 'back/base_back.html.twig' %}
 {% block title %}Liste des films{% endblock %}
-
+{#
 {% block admin_nav %}{{ include('back/_nav.html.twig', {'nav_active': 'movie_index'}) }}{% endblock %}
-
+#}
 {% block body %}
 <div class="container">
     <h1>Liste des films</h1>
-
+    {{ include('_flash_messages.html.twig') }}
     <a  class="btn btn-primary" href="{{ path('back_movie_new') }}">Créer un nouveau film</a>
         <table class="table">
             <thead>

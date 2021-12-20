@@ -39,9 +39,10 @@ class MovieController extends AbstractController
             $entityManager->persist($movie);
             $entityManager->flush();
             $this->addFlash(
-                'success', 'Film ajouté'
-            );
-            return $this->redirectToRoute('back_movie_index', [], Response::HTTP_SEE_OTHER);
+                'success', 'Film "'.$movie->getTitle().'" ajouté'
+            ); 
+       
+            return $this->redirectToRoute('back_movie_show', ['id' => $movie->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('back/movie/new.html.twig', [
@@ -78,7 +79,7 @@ class MovieController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash(
-                'success', 'Film modifié'
+                'success', 'Film "'.$movie->getTitle().'" modifié'
             );
             return $this->redirectToRoute('back_movie_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -100,7 +101,7 @@ class MovieController extends AbstractController
         if ($this->isCsrfTokenValid('delete'.$movie->getId(), $request->request->get('_token'))) {
 
             $this->addFlash(
-                'success', 'Film supprimé'
+                'success', 'Film "'.$movie->getTitle().'" supprimé'
             );
             $entityManager->remove($movie);
             $entityManager->flush();

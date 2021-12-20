@@ -53,6 +53,8 @@ class Movie
 
     /**
      * @ORM\ManyToMany(targetEntity=Genre::class, inversedBy="movies")
+     * Si on souhaite qu'un film ait au moins 1 genre
+     * @Assert\Count(min=1)
      */
     private $genres;
 

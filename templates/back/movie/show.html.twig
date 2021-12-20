@@ -1,12 +1,13 @@
-{% extends 'base.html.twig' %}
+{% extends 'back/base_back.html.twig' %}
 
 {% block title %}Fiche film{% endblock %}
-
+{#
 {% block admin_nav %}{{ include('back/_nav.html.twig', {'nav_active': 'movie_index'}) }}{% endblock %}
-
+#}
 {% block body %}
 <div class="container">
     <h1>Fiche film</h1>
+    {{ include('_flash_messages.html.twig') }}
 
     <table class="table">
         <tbody>
@@ -49,9 +50,9 @@
         </tbody>
     </table>
 
-    <a class="btn btn-primary" href="{{ path('back_movie_index') }}">Revenir à la page d'accueil</a>
+    <a class="btn btn-primary float-end" href="{{ path('back_movie_index') }}">Retour à la liste</a>
 
-    <a class="btn btn-primary" href="{{ path('back_movie_edit', {'id': movie.id}) }}">Modifier</a>
+    <a class="btn btn-success" href="{{ path('back_movie_edit', {'id': movie.id}) }}">Modifier</a>
 
     {{ include('back/movie/_delete_form.html.twig') }}
 </div>

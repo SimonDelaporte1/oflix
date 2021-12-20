@@ -79,19 +79,16 @@
             </div>
         </div>
     </nav>
-    {% block admin_nav %}{% endblock %}
-    {% for label, messages in app.flashes %}
-    {% for message in messages %}
-
-    <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
-        {{ message }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
-
-    {% endfor %}
-{% endfor %}
     <div class="container">
-    {% block body %}{% endblock %}
+        {% block subnav %}{% endblock %}
+
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                {% block body %}{% endblock %}
+                </div>
+            </div>
+        </div>
     </div>
     <!-- footer -->
     <footer class="container-fluid py-4 border-top text-center">

@@ -31,3 +31,8 @@ html {
     top: 0;
     right: 0;
 }
+/* Backoffice */
+
+#back_delete_button {
+    display: inline-block;
+}
