@@ -26,6 +26,8 @@
                     <td><img src="{{ movie.poster }}" width="50" /></td>
                     <td>{{ movie.type }}</td>
                     <td>
+
+                        <a class="btn btn-sm btn-warning" href="{{ path('back_casting_index', {'id': movie.id}) }}">castings</a>
                         <a class="btn btn-primary" href="{{ path('back_movie_show', {'id': movie.id}) }}">Voir</a>
                         <a class="btn btn-primary" href="{{ path('back_movie_edit', {'id': movie.id}) }}">Modifier</a>
                     </td>

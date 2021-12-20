@@ -54,7 +54,7 @@ class MovieController extends AbstractController
     /**
      * @Route("/{id}", name="back_movie_show", methods={"GET"}, requirements={"id"="\d+"})
      */
-    public function show(Movie $movie): Response
+    public function show(Movie $movie = null): Response
     {
         if ($movie === null) {
             throw $this->createNotFoundException('Film non trouvé.');

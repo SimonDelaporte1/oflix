@@ -48,7 +48,7 @@ class CastingRepository extends ServiceEntityRepository
     }
     */
 
-    public function findAllJoinedToCastingDql(int $Movie_id): ?array
+    public function findAllJoinedToCastingDql($Movie_id): ?array
     {
         $entityManager = $this->getEntityManager();
 
@@ -63,7 +63,7 @@ class CastingRepository extends ServiceEntityRepository
         return $query->getResult();
     }
 
-    public function findAllJoinedToCastingQb(int $movie): ?array
+    public function findAllJoinedToCastingQb( $movie): ?array
     {
         return $this->createQueryBuilder('c')
             ->addSelect('p')

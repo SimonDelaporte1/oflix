@@ -6,8 +6,8 @@
 #}
 {% block body %}
     <h1>Créer un nouveau Casting</h1>
-
+    <h2>{{ movie.title }}</h2>
     {{ include('back/casting/_form.html.twig') }}
 
-    <a class="btn btn-primary" href="{{ path('back_casting_index') }}">Revenir à la liste</a>
+    <a class="btn btn-primary" href="{{ path('back_movie_index', {id: movie.id}) }}">Revenir à la liste</a>
 {% endblock %}

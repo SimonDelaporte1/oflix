@@ -2,14 +2,15 @@
 
 namespace App\Controller\Back;
 
+use App\Entity\Movie;
 use App\Entity\Casting;
 use App\Form\CastingType;
 use App\Repository\CastingRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @Route("/back/casting")
@@ -17,37 +18,42 @@ use Symfony\Component\Routing\Annotation\Route;
 class CastingController extends AbstractController
 {
     /**
-     * @Route("/", name="back_casting_index", methods={"GET"})
+     * @Route("/movie/{id}", name="back_casting_index", methods={"GET"}, requirements={"id"="\d+"})
      */
-    public function index(CastingRepository $castingRepository): Response
+    public function index(Movie $movie, CastingRepository $castingRepository): Response
     {
         return $this->render('back/casting/index.html.twig', [
-            'castings' => $castingRepository->findAll(),
+            'castings' => $castingRepository->findAllJoinedToCastingQb($movie),
+            'movie' => $movie
         ]);
     }
 
     /**
-     * @Route("/new", name="back_casting_new", methods={"GET", "POST"})
+     * @Route("/new/movie/{id}", name="back_casting_new", methods={"GET", "POST"})
      */
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Movie $movie, Request $request, EntityManagerInterface $entityManager): Response
     {
         $casting = new Casting();
         $form = $this->createForm(CastingType::class, $casting);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $casting->setMovie($movie);
             $entityManager->persist($casting);
             $entityManager->flush();
+
+            // On associe le film au casting
 
             $this->addFlash(
                 'success', 'Casting créé'
             );
-            return $this->redirectToRoute('back_casting_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('back_casting_index', ['id' => $movie->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('back/casting/new.html.twig', [
             'casting' => $casting,
             'form' => $form,
+            'movie' => $movie,
         ]);
     }
 
@@ -75,7 +81,7 @@ class CastingController extends AbstractController
             $this->addFlash(
                 'success', 'Casting modifié'
             );
-            return $this->redirectToRoute('back_casting_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('back_casting_index', ['id' => $casting->getMovie()->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('back/casting/edit.html.twig', [
@@ -97,6 +103,6 @@ class CastingController extends AbstractController
             );
         }
 
-        return $this->redirectToRoute('back_casting_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('back_casting_index', ['id' => $casting->getMovie()->getId()], Response::HTTP_SEE_OTHER);
     }
 }

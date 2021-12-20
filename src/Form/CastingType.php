@@ -29,12 +29,6 @@ class CastingType extends AbstractType
                 'multiple' => false,
                 'expanded' => false
             ])
-            ->add('movie', EntityType::class, [
-                'class' => Movie::class,
-                'choice_label' => 'title',
-                'multiple' => false,
-                'expanded' => false
-            ])
         ;
     }
 
