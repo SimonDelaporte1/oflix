@@ -56,16 +56,28 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                             data-bs-toggle="dropdown">
-                            <span>Charles</span>
+                            <span>
+                            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                              {% set roles_array = { 'ROLE_ADMIN': 'Administrateur', 'ROLE_USER': 'Membre', 'ROLE_MANAGER': 'Manager' } %}
+                                {{ app.user.email }}
+                                {% for role in app.user.roles %}
+                                    ({{ roles_array[role] }})
+                                {% endfor %}
+                            {% else %}
+                                Anonymous?(Visiteur)
+                            {% endif %}</span>
                             <i class="bi bi-person-square"></i>
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Profil</a></li>
                             <li><a class="dropdown-item" href="{{ path('back_movie_index') }}">Backoffice</a></li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item" href="#">Déconnexion</a></li>
+                            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                <li><a class="dropdown-item" href="{{ path('login_logout') }}">Déconnexion</a></li>
+                            {% else %}
+                                <li><a class="dropdown-item" href="{{ path('login_index') }}">Connexion</a></li>
+                            {% endif %}
                         </ul>
                     </li>
                 </ul>
