@@ -38,9 +38,14 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: ^/back, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
-
+        - { path: /back/(.*)/(new|edit), roles: ROLE_ADMIN} # page édition création
+        - { path: /back/(.*)/\d+, roles: ROLE_ADMIN, methods: [POST]} # suppression que pour les admins
+        - { path: ^/back/, roles: ROLE_MANAGER } # back office pour les managers, uniquement en consultation
+        - { path: /review/, roles: ROLE_USER } # les utilisateurs doivent avoir accès au avis
+        #- { path: ^/$ , roles: ANONYME }
+    role_hierarchy:
+        ROLE_MANAGER: ROLE_USER
+        ROLE_ADMIN: [ROLE_MANAGER, ROLE_USER]
 when@test:
     security:
         password_hashers:
