@@ -38,9 +38,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
-     * @Assert\NotBlank
-     * @Assert\Regex("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/", message = "Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character:")
-     */
+    */
     private $password;
 
     public function getId(): ?int
