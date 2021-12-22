@@ -52,37 +52,39 @@
                         <a class="nav-link {% block nav_active_favorites %}{% endblock %}" href="{{ path('favorites_list') }}"><i class="bi bi-bookmark"></i> Ma liste</a>
                     </li>
                 </ul>
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                             data-bs-toggle="dropdown">
                             <span>
-                            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                              {% set roles_array = { 'ROLE_ADMIN': 'Administrateur', 'ROLE_USER': 'Membre', 'ROLE_MANAGER': 'Manager' } %}
                                 {{ app.user.email }}
-                                {% for role in app.user.roles %}
-                                    ({{ roles_array[role] }})
-                                {% endfor %}
-                            {% else %}
-                                Anonymous?(Visiteur)
-                            {% endif %}</span>
+                            </span>
                             <i class="bi bi-person-square"></i>
                         </a>
                         <ul class="dropdown-menu">
+                            {# Avec la hérarchie, MANAGER et ADMIN ont accès au back-office #}
+                            {% if is_granted('ROLE_MANAGER') %}
                             <li><a class="dropdown-item" href="{{ path('back_movie_index') }}">Backoffice</a></li>
+                            {% endif %}
+                            {% if is_granted('ROLE_ADMIN') %}
+                            <li><span class="ms-3 text-muted">Administrateur</span></li>
+                            {% elseif is_granted('ROLE_MANAGER') %}
+                            <li><span class="ms-3 text-muted">Manager</span></li>
+                            {% elseif is_granted('ROLE_USER') %}
+                            <li><span class="ms-3 text-muted">Utilisateur</span></li>
+                            {% endif %}
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                                <li><a class="dropdown-item" href="{{ path('login_logout') }}">Déconnexion</a></li>
-                            {% else %}
-                                <li><a class="dropdown-item" href="{{ path('login_index') }}">Connexion</a></li>
-                            {% endif %}
+                            <li><a class="dropdown-item" href="{{ path('login_logout') }}">Déconnexion</a></li>
                         </ul>
                     </li>
                 </ul>
 
-                <button type="button" class="btn btn-danger me-2">Connexion</button>
+                {% else %} 
+                    <a class="btn btn-danger me-2" href="{{ path('login_index') }}">Connexion</a>
+                {% endif %}
 
                 <form class="d-flex" action="list.html">
                     <input class="form-control form-control-sm me-2" name="search" type="search" placeholder="Rechercher...">
