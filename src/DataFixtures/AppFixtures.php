@@ -3,17 +3,18 @@
 namespace App\DataFixtures;
 
 use Faker\Factory;
+use App\Entity\User;
 use App\Entity\Genre;
 use App\Entity\Movie;
 use App\Entity\Person;
 use App\Entity\Season;
 use App\Entity\Casting;
-use Doctrine\DBAL\Connection;
 
+use Doctrine\DBAL\Connection;
 use App\DataFixtures\RoleProvider;
 use App\DataFixtures\GenreProvider;
-use App\DataFixtures\MovieProvider;
 
+use App\DataFixtures\MovieProvider;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 
@@ -41,7 +42,9 @@ class AppFixtures extends Fixture
         $this->connection->executeQuery('TRUNCATE TABLE movie');
         $this->connection->executeQuery('TRUNCATE TABLE movie_genre');
         $this->connection->executeQuery('TRUNCATE TABLE person');
+        $this->connection->executeQuery('TRUNCATE TABLE review');
         $this->connection->executeQuery('TRUNCATE TABLE season');
+        $this->connection->executeQuery('TRUNCATE TABLE user');
         // etc.
     }
 
@@ -58,6 +61,25 @@ class AppFixtures extends Fixture
         $faker->addProvider(new RoleProvider($faker));
         $faker->addProvider(new GenreProvider($faker));
         $faker->addProvider(new MovieProvider($faker));
+        
+        $admin = new User();
+        $admin->setEmail('admin@admin.com');
+        $admin->setRoles(["ROLE_ADMIN"]);
+        $admin->setPassword('$2y$13$j3/Z4Wrfs8siODsmAepFl.sLuH2ci7XQ.i3zQrCnJjs2T0kcLURpG');
+        $manager->persist($admin);
+        
+        $user = new User();
+        $user->setEmail('user@user.com');
+        $user->setRoles(["ROLE_USER"]);
+        $user->setPassword('$2y$13$nOoZJpdhcfxWA8srAiUWt.IRPLclO23SWDDGmoW2zz9p6CZYiyCA6');
+        $manager->persist($user);
+        
+        $manager_user = new User();
+        $manager_user->setEmail('manager@manager.com');
+        $manager_user->setRoles(["ROLE_MANAGER"]);
+        $manager_user->setPassword('$2y$13$2sMdkylKKhak5TPCx2kH6OiNhVbRKSnOWfciMKOVZIaIHmFM5RSse');
+        $manager->persist($manager_user);
+        
         $person_array = [];
         $role_array = [];
         $genre_array = [];
