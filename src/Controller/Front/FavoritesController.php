@@ -4,6 +4,7 @@ namespace App\Controller\Front;
 
 use App\Entity\Movie;
 use App\Model\Movies;
+use App\Service\FavoritesManager;
 use App\Repository\MovieRepository;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -22,33 +23,21 @@ class FavoritesController extends AbstractController
             'moviesList' => $moviesList
         ]);
     }
-
     /**
      * Favorite gestion
+     * <3 Nicolas Lenne
      * 
      * @Route("/favorites/gestion/{id}", name="favorite_gestion", requirements={"id"="\d+"})
      */
-    public function favorite($id, Movie $movie, SessionInterface $session, MovieRepository $movieRepository)
+    public function favorite(Movie $movie, FavoritesManager $favoritesManager)
     {
-        // 1. On récupère les favoris en session
-        $myFavorites = $session->get('myFavorites', []);
-
-        // 2. On met à jour le tableau récupéré
-
-        // Si le film est déjà dans les favoris
-        if (array_key_exists($id, $myFavorites)) {
-            // On le retire
-            // $key = array_search($id, $myFavorites);
-            unset($myFavorites[$id]);
-            $this->addFlash('success', $movie->getTitle().' retiré(e) des favoris');
+        $action = $favoritesManager->toggle($movie);
+        
+        if ($action == 'add') {
+            $this->addFlash('success', $movie->getTitle() . ' ajouté(e) aux favoris');
         } else {
-            // Sinon on l'ajoute
-            $myFavorites[$id] = $movie;
-            $this->addFlash('success', $movie->getTitle().' ajouté(e) aux favoris');
+            $this->addFlash('success', $movie->getTitle() . ' retiré(e) des favoris');
         }
-
-        // 3. On écrase les favoris en session
-        $session->set('myFavorites', $myFavorites);
 
         // On redirige vers la home
         return $this->redirectToRoute('favorites_list');
@@ -59,10 +48,10 @@ class FavoritesController extends AbstractController
      * 
      * @Route("/favorites/gestion/purge", name="favorites_purge")
      */
-    public function purgeFavorites(SessionInterface $session)
+    public function purgeFavorites(FavoritesManager $favoritesManager)
     {
         // On vide l'attribut de session concerné
-        $session->remove('myFavorites');
+        $favoritesManager->empty();
 
         $this->addFlash('success', 'Favoris supprimés');
 
