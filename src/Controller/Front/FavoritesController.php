@@ -51,10 +51,12 @@ class FavoritesController extends AbstractController
     public function purgeFavorites(FavoritesManager $favoritesManager)
     {
         // On vide l'attribut de session concerné
-        $favoritesManager->empty();
-
-        $this->addFlash('success', 'Favoris supprimés');
-
+        // On vide l'attribut de session concerné
+        if ($favoritesManager->empty()) {
+            $this->addFlash('success', 'Favoris supprimés');
+        } else {
+            $this->addFlash('danger', 'Cette fonctionnalité est désactivée');
+        }
         // On redirige vers la liste
         return $this->redirectToRoute('favorites_list');
     }
