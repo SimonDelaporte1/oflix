@@ -81,7 +81,7 @@ Class MainController extends AbstractController
         $casting = $CastingRepository->findAllJoinedToCastingQb($id);
         // dd($this_movie_info);
         return $this->render('front/main/movieShow.html.twig', [
-            'this_movie_info' => $this_movie_info,
+            'movie' => $this_movie_info,
             'casting' => $casting
         ]);
     }
