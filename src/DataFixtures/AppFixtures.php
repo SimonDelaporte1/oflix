@@ -10,22 +10,26 @@ use App\Entity\Person;
 use App\Entity\Season;
 use App\Entity\Casting;
 
+use App\Service\MySlugger;
 use Doctrine\DBAL\Connection;
 use App\DataFixtures\RoleProvider;
-use App\DataFixtures\GenreProvider;
 
+use App\DataFixtures\GenreProvider;
 use App\DataFixtures\MovieProvider;
 use Doctrine\Persistence\ObjectManager;
+
 use Doctrine\Bundle\FixturesBundle\Fixture;
 
 class AppFixtures extends Fixture
 {
 
     private $connection;
+    private $slugger;
 
-    public function __construct(Connection $connection)
+    public function __construct(Connection $connection, MySlugger $slugger)
     {
         $this->connection = $connection;
+        $this->slugger = $slugger;
     }
 
     /**
@@ -94,7 +98,7 @@ class AppFixtures extends Fixture
             $genre_array[] = $faker->getGenre();
         }
         for ($i = 0; $i < 8; $i++) {
-            $movie_array[] = $faker->getMovie();
+            $movie_array[] = $faker->getMovie($i);
         }
 
 
@@ -117,6 +121,7 @@ class AppFixtures extends Fixture
             $movie->setDuration($this_movie_array['duration']);
             $movie->setType($this_movie_array['type']);
             $movie->setTitle($this_movie_array['title']);
+            $movie->setSlug($this->slugger->MySluggerToLower($this_movie_array['title']));
             $movie->setReleaseDate($this_movie_array['release_date']);
             $movie->setPoster($this_movie_array['poster']);
             $movie->setRating($this_movie_array['rating']);

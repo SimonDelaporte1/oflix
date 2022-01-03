@@ -5,6 +5,7 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     app.favorites_empty_enabled: '%env(bool:FAVORITES_EMPTY_ENABLED)%'
+    app.slugger_lowercase_enable: '%env(bool:SLUGGER_LOWER_CASE_ENABLE)%'
 
 services:
     # default configuration for services in *this* file
@@ -31,3 +32,9 @@ services:
         arguments:
             # Nom du paramètre
             $emptyEnabled: '%app.favorites_empty_enabled%'
+
+    App\Service\MySlugger:
+           # Arguments à transmettre au service
+        arguments:
+            # Nom du paramètre
+            $lowerEnabled: '%app.slugger_lowercase_enable%'

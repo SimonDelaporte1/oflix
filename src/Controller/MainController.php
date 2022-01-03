@@ -43,7 +43,7 @@ Class MainController extends AbstractController
             //dd($post);
 
             // On redirige vers la liste
-            return $this->redirectToRoute('main_movie_show', ['id' => $movie->getId()]);
+            return $this->redirectToRoute('main_movie_show', ['slug' => $movie->getSlug()]);
         }
 
         // Sinon on affiche le formulaire
@@ -68,20 +68,17 @@ Class MainController extends AbstractController
     }
 
     /** 
-     * @Route("/movie/{id}", name="main_movie_show", requirements={"id"="\d+"})
+     * @Route("/movie/{slug}", name="main_movie_show", requirements={"id"="\d+"})
      */
-    public function movieShow(CastingRepository $CastingRepository, MovieRepository $MovieRepository, $id)
+    public function movieShow(Movie $movie, CastingRepository $CastingRepository)
     {
-        // on rend un template twig à partir du dossier templates/
-        $this_movie_info = $MovieRepository->find($id);
-
-        if($this_movie_info === null) {
+        if($movie === null) {
             throw $this->createNotFoundException('Film ou série non trouvé.');
         }
-        $casting = $CastingRepository->findAllJoinedToCastingQb($id);
-        // dd($this_movie_info);
+        $casting = $CastingRepository->findAllJoinedToCastingQb($movie->getId());
+        // dd($movie);
         return $this->render('front/main/movieShow.html.twig', [
-            'movie' => $this_movie_info,
+            'movie' => $movie,
             'casting' => $casting
         ]);
     }

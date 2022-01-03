@@ -4,12 +4,14 @@ namespace App\Controller\Back;
 
 use App\Entity\Movie;
 use App\Form\MovieType;
+use App\Service\MySlugger;
 use App\Repository\MovieRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @Route("/back/movie")
@@ -29,13 +31,14 @@ class MovieController extends AbstractController
     /**
      * @Route("/new", name="back_movie_new", methods={"GET", "POST"})
      */
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, MySlugger $slugger): Response
     {
         $movie = new Movie();
         $form = $this->createForm(MovieType::class, $movie);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $movie->setSlug($slugger->MySluggerToLower($movie->getTitle()));
             $entityManager->persist($movie);
             $entityManager->flush();
             $this->addFlash(
@@ -67,7 +70,7 @@ class MovieController extends AbstractController
     /**
      * @Route("/{id}/edit", name="back_movie_edit", methods={"GET", "POST"}, requirements={"id"="\d+"})
      */
-    public function edit(Request $request, Movie $movie, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Movie $movie, EntityManagerInterface $entityManager, MySlugger $slugger): Response
     {
         $form = $this->createForm(MovieType::class, $movie);
         $form->handleRequest($request);
@@ -76,6 +79,7 @@ class MovieController extends AbstractController
             throw $this->createNotFoundException('Film non trouvé.');
         }
         if ($form->isSubmitted() && $form->isValid()) {
+            $movie->setSlug($slugger->MySluggerToLower($movie->getTitle()));
             $entityManager->flush();
 
             $this->addFlash(
