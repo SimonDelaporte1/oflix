@@ -68,9 +68,9 @@ Class MainController extends AbstractController
     }
 
     /** 
-     * @Route("/movie/{slug}", name="main_movie_show", requirements={"id"="\d+"})
+     * @Route("/movie/{slug}", name="main_movie_show")
      */
-    public function movieShow(Movie $movie, CastingRepository $CastingRepository)
+    public function movieShow(Movie $movie = null, CastingRepository $CastingRepository)
     {
         if($movie === null) {
             throw $this->createNotFoundException('Film ou série non trouvé.');
