@@ -15,6 +15,8 @@ class OmdbApi
     // @link https://symfony.com/doc/current/http_client.html
     private $httpClient;
     // Pour récupérer les paramètres de services.yaml (mais pas que !) depuis notre code
+    // /!\ On pourrait tranmsettre la clé API directemnt via le constructeur comme fait précédemment
+    // Autre façon de faire et qui permet d'accéder à tous les paramètres du conteneur
     private $parameterBag;
 
     public function __construct(HttpClientInterface $httpClient, ParameterBagInterface $parameterBag)
