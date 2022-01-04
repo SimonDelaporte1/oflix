@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 /**
  * Classe d'accès à l'API d'omdbapi.com
@@ -13,10 +14,13 @@ class OmdbApi
     // On utilise le composant HttpClient de Symfony
     // @link https://symfony.com/doc/current/http_client.html
     private $httpClient;
+    // Pour récupérer les paramètres de services.yaml (mais pas que !) depuis notre code
+    private $parameterBag;
 
-    public function __construct(HttpClientInterface $httpClient)
+    public function __construct(HttpClientInterface $httpClient, ParameterBagInterface $parameterBag)
     {
         $this->httpClient = $httpClient;
+        $this->parameterBag = $parameterBag;
     }
 
     /**
@@ -35,7 +39,7 @@ class OmdbApi
             [
                 'query' => [
                     't' => $title, // urlencode() sera appliqué dessus
-                    'apiKey' => '83bfb8c6',
+                    'apiKey' => $this->parameterBag->get('app.omdb_api_key'),
                 ]
             ]
         );

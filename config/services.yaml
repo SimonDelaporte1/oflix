@@ -6,6 +6,7 @@
 parameters:
     app.favorites_empty_enabled: '%env(bool:FAVORITES_EMPTY_ENABLED)%'
     app.slugger_lowercase_enable: '%env(bool:SLUGGER_LOWER_CASE_ENABLE)%'
+    app.omdb_api_key: '%env(OMDB_API_KEY)%'
 
 services:
     # default configuration for services in *this* file
