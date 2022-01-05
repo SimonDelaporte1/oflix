@@ -9,7 +9,10 @@ class MaintenanceSubscriber implements EventSubscriberInterface
 {
     public function onKernelResponse(ResponseEvent $event)
     {
-        // ...
+        $response = $event->getResponse();
+        $content = $response->getContent();
+        $content = str_replace('<body>','<body><div class="alert alert-danger">Maintenance prévue mardi 10 janvier à 17h00</div>', $content);
+        $response->setContent($content);
     }
 
     public static function getSubscribedEvents()
