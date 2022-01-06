@@ -8,6 +8,7 @@ use App\Repository\MovieRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=MovieRepository::class)
@@ -23,36 +24,40 @@ class Movie
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"get_collection"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
+     * @Groups({"get_collection"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="string", length=20)
      * @Assert\NotBlank
+     * @Groups({"get_collection"})
      */
     private $type;
 
     /**
      * @ORM\Column(type="date", nullable=true)
      * @Assert\NotBlank
+     * @Groups({"get_collection"})
      */
     private $releaseDate;
 
     /**
      * @ORM\OneToMany(targetEntity=Season::class, mappedBy="movie", orphanRemoval=true)
+     * @Groups({"get_collection"})
      */
     private $seasons;
 
     /**
      * @ORM\OneToMany(targetEntity=Casting::class, mappedBy="movie")
      * @ORM\OrderBy({"creditOrder" = "ASC"})
-     * 
      */
     private $castings;
 
@@ -60,12 +65,14 @@ class Movie
      * @ORM\ManyToMany(targetEntity=Genre::class, inversedBy="movies")
      * Si on souhaite qu'un film ait au moins 1 genre
      * @Assert\Count(min=1)
+     * @Groups({"get_collection"})
      */
     private $genres;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      * @Assert\NotBlank
+     * @Groups({"get_collection"})
      */
     private $summary;
 
@@ -81,6 +88,7 @@ class Movie
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups({"get_collection"})
      */
     private $poster;
 
@@ -91,6 +99,7 @@ class Movie
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Groups({"get_collection"})
      */
     private $duration;
 
@@ -101,6 +110,7 @@ class Movie
 
     /**
      * @ORM\Column(type="string", length=2083, nullable=true)
+     * @Groups({"get_collection"})
      */
     private $slug;
 

@@ -6,6 +6,7 @@ use App\Entity\Movie;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\SeasonRepository;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=SeasonRepository::class)
@@ -22,12 +23,14 @@ class Season
     /**
      * @ORM\Column(type="smallint")
      * @Assert\NotBlank
+     * @Groups({"get_collection"})
      */
     private $number;
 
     /**
      * @ORM\Column(type="smallint")
      * @Assert\NotBlank
+     * @Groups({"get_collection"})
      */
     private $episodesNumber;
 
