@@ -24,40 +24,41 @@ class Movie
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"get_collection"})
+     * @Groups({"get_collection", "get_movie"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
-     * @Groups({"get_collection"})
+     * @Groups({"get_collection", "get_movie"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="string", length=20)
      * @Assert\NotBlank
-     * @Groups({"get_collection"})
+     * @Groups({"get_collection", "get_movie"})
      */
     private $type;
 
     /**
      * @ORM\Column(type="date", nullable=true)
      * @Assert\NotBlank
-     * @Groups({"get_collection"})
+     * @Groups({"get_collection", "get_movie"})
      */
     private $releaseDate;
 
     /**
      * @ORM\OneToMany(targetEntity=Season::class, mappedBy="movie", orphanRemoval=true)
-     * @Groups({"get_collection"})
+     * @Groups({"get_collection", "get_movie"})
      */
     private $seasons;
 
     /**
      * @ORM\OneToMany(targetEntity=Casting::class, mappedBy="movie")
      * @ORM\OrderBy({"creditOrder" = "ASC"})
+     * @Groups({"get_movie"})
      */
     private $castings;
 
@@ -65,14 +66,14 @@ class Movie
      * @ORM\ManyToMany(targetEntity=Genre::class, inversedBy="movies")
      * Si on souhaite qu'un film ait au moins 1 genre
      * @Assert\Count(min=1)
-     * @Groups({"get_collection"})
+     * @Groups({"get_collection", "get_movie"})
      */
     private $genres;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      * @Assert\NotBlank
-     * @Groups({"get_collection"})
+     * @Groups({"get_collection", "get_movie"})
      */
     private $summary;
 

@@ -23,14 +23,14 @@ class Season
     /**
      * @ORM\Column(type="smallint")
      * @Assert\NotBlank
-     * @Groups({"get_collection"})
+     * @Groups({"get_collection", "get_movie"})
      */
     private $number;
 
     /**
      * @ORM\Column(type="smallint")
      * @Assert\NotBlank
-     * @Groups({"get_collection"})
+     * @Groups({"get_collection", "get_movie"})
      */
     private $episodesNumber;
 
