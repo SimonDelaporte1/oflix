@@ -94,7 +94,15 @@ class MovieRepository extends ServiceEntityRepository
         return $result;
     }
 
-
+    public function findByGenre($genre)
+    {
+        return $this->createQueryBuilder('m')
+            ->innerJoin('m.genres', 'g')
+            ->andWhere('g = :genre')
+            ->setParameter('genre', $genre)
+            ->getQuery()
+            ->getResult();
+    }
 
 
     // /**

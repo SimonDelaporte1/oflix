@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class ApiController extends AbstractController
+class ApiMovieController extends AbstractController
 {
     /**
      * Get movies collection
