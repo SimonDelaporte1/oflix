@@ -44,3 +44,26 @@ services:
     App\EventSubscriber\MaintenanceSubscriber:
         arguments:
             $maintenanceEnabled: '%app.is_maintenance%'
+
+    App\EventListener\MovieListener:
+        tags:
+            # Ecouteur preUpdate
+            -
+                # these are the options required to define the entity listener
+                name: 'doctrine.orm.entity_listener'
+                # Nom de l'event en camelCase
+                # => cela correspond aussi au nom de la méthode appelée dans le listener
+                event: 'preUpdate'
+                entity: 'App\Entity\Movie'
+                # Nom de la méthode à appeler
+                method: 'updateSlug'
+            # Ecouteur prePersist
+            -
+                # these are the options required to define the entity listener
+                name: 'doctrine.orm.entity_listener'
+                # Nom de l'event en camelCase
+                # => cela correspond aussi au nom de la méthode appelée dans le listener
+                event: 'prePersist'
+                entity: 'App\Entity\Movie'
+                # Nom de la méthode à appeler
+                method: 'updateSlug'

@@ -11,6 +11,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=MovieRepository::class)
+ * 
+ * Ecoute les événements du cycle de vie de l'entité
+ * @link https://symfony.com/doc/current/doctrine/events.html#doctrine-lifecycle-callbacks
+ * @ORM\HasLifecycleCallbacks()
+ * 
  */
 class Movie
 {
@@ -350,5 +355,15 @@ class Movie
         $this->updatedAt = $updatedAt;
 
         return $this;
+    }
+
+    /**
+     * Mise à jour automatique de la date
+     * @ORM\PreUpdate
+     */
+    public function setUpdatedAtValue()
+    {
+        // Date courante
+        $this->updatedAt = new DateTime();
     }
 }

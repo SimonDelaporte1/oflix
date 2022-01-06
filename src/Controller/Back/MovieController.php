@@ -38,7 +38,6 @@ class MovieController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $movie->setSlug($slugger->MySluggerToLower($movie->getTitle()));
             $entityManager->persist($movie);
             $entityManager->flush();
             $this->addFlash(
@@ -79,7 +78,6 @@ class MovieController extends AbstractController
             throw $this->createNotFoundException('Film non trouvé.');
         }
         if ($form->isSubmitted() && $form->isValid()) {
-            $movie->setSlug($slugger->MySluggerToLower($movie->getTitle()));
             $entityManager->flush();
 
             $this->addFlash(

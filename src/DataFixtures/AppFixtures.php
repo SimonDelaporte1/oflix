@@ -121,7 +121,6 @@ class AppFixtures extends Fixture
             $movie->setDuration($this_movie_array['duration']);
             $movie->setType($this_movie_array['type']);
             $movie->setTitle($this_movie_array['title']);
-            $movie->setSlug($this->slugger->MySluggerToLower($this_movie_array['title']));
             $movie->setReleaseDate($this_movie_array['release_date']);
             $movie->setPoster($this_movie_array['poster']);
             $movie->setRating($this_movie_array['rating']);
