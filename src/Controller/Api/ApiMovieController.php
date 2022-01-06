@@ -55,4 +55,27 @@ class ApiMovieController extends AbstractController
             ['groups' => 'get_movie']
         );
     }
+
+    /**
+     * Get movies collection
+     * 
+     * @Route("/api/movierand", name="api_movie_rand_get", methods={"GET"})
+     */
+    public function getRandMovie(MovieRepository $movieRepository): Response
+    {
+        // @todo : retourner les films de la BDD
+        
+        // On va chercher les données
+        $movie = $movieRepository->findOneRandomMovie();
+        return $this->json( 
+            // Les données à sérialiser (à convertir en JSON)
+            $movie,
+            // Le status code
+            200,
+            // Les en-têtes de réponse à ajouter (aucune)
+            [],
+            // Les groupes à utiliser par le Serializer
+            ['groups' => 'get_movie']
+        );
+    }
 }

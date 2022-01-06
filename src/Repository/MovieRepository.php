@@ -78,6 +78,7 @@ class MovieRepository extends ServiceEntityRepository
         return $query->setMaxResults(2)->getResult();
         */
     }
+
     public function findOneRandomMovie()
     {
         // On peut se permettre de le faire en SQL pur
@@ -85,7 +86,7 @@ class MovieRepository extends ServiceEntityRepository
         // on a juste besoin du slug et du title pour générer la route
         $dbalConnection = $this->getEntityManager()->getConnection();
 
-        $sql = 'SELECT title, slug
+        $sql = 'SELECT *
             FROM `movie`
             ORDER BY RAND()
             LIMIT 1';
