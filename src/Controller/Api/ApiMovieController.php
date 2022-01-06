@@ -69,13 +69,7 @@ class ApiMovieController extends AbstractController
         $movie = $movieRepository->findOneRandomMovie();
         return $this->json( 
             // Les données à sérialiser (à convertir en JSON)
-            $movie,
-            // Le status code
-            200,
-            // Les en-têtes de réponse à ajouter (aucune)
-            [],
-            // Les groupes à utiliser par le Serializer
-            ['groups' => 'get_movie']
+            $movie
         );
     }
 }
