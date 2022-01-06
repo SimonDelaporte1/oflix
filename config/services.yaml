@@ -7,6 +7,7 @@ parameters:
     app.favorites_empty_enabled: '%env(bool:FAVORITES_EMPTY_ENABLED)%'
     app.slugger_lowercase_enable: '%env(bool:SLUGGER_LOWER_CASE_ENABLE)%'
     app.omdb_api_key: '%env(OMDB_API_KEY)%'
+    app.is_maintenance: '%env(bool:IS_MAINTENANCE)%'
 
 services:
     # default configuration for services in *this* file
@@ -39,3 +40,7 @@ services:
         arguments:
             # Nom du paramètre
             $lowerEnabled: '%app.slugger_lowercase_enable%'
+
+    App\EventSubscriber\MaintenanceSubscriber:
+        arguments:
+            $maintenanceEnabled: '%app.is_maintenance%'

@@ -7,10 +7,22 @@ use Symfony\Component\HttpKernel\Event\ResponseEvent;
 
 class MaintenanceSubscriber implements EventSubscriberInterface
 {
+    private $maintenanceEnabled;
+
+    public function __construct(bool $maintenanceEnabled)
+    {
+        $this->maintenanceEnabled = $maintenanceEnabled;
+    }
+
     public function onKernelResponse(ResponseEvent $event)
     {
         if (!$event->isMainRequest()) {
             // don't do anything if it's not the main request
+            return;
+        }
+
+        // Y'a-t-il une maintenance ?
+        if ($this->maintenanceEnabled === false) {
             return;
         }
         
