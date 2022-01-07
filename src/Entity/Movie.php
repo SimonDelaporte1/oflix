@@ -68,7 +68,7 @@ class Movie
     /**
      * @ORM\ManyToMany(targetEntity=Genre::class, inversedBy="movies")
      * @Groups({"get_collection", "get_movie"})
-     */     
+     */
     private $genres;
 
     /**

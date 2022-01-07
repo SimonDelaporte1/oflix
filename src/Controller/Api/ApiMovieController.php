@@ -2,8 +2,10 @@
 
 namespace App\Controller\Api;
 
+use App\Entity\Genre;
 use App\Entity\Movie;
 use Doctrine\ORM\EntityManager;
+use App\Repository\GenreRepository;
 use App\Repository\MovieRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Serializer\Serializer;
@@ -48,12 +50,20 @@ class ApiMovieController extends AbstractController
      * 
      * @Route("/api/movies", name="api_movies_post", methods={"POST"})
      */
-    public function setCollection(Request $request, SerializerInterface $serializer, ValidatorInterface $validator, ManagerRegistry $doctrine): Response
+    public function setCollection(Request $request, SerializerInterface $serializer, ValidatorInterface $validator, ManagerRegistry $doctrine, GenreRepository $genreRepository): Response
     {
         // @todo : retourner les films de la BDD
         $jsonContent = $request->getContent();
         // On va chercher les données
+        /*
+            $arrayContent = json_decode($jsonContent, true);
 
+            $thisGenre = $genreRepository->find($arrayContent['genres'][0]['id']);
+            $genre = new Genre();
+            $genre->setName($thisGenre->getName());
+            $movie->addGenres($genre);
+        */
+        
         $movie = $serializer->deserialize($jsonContent, Movie::class, 'json');
 
         $errors = $validator->validate($movie);
