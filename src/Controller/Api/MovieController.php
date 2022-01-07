@@ -68,14 +68,15 @@ class MovieController extends AbstractController
 
         $errors = $validator->validate($movie);
         if (count($errors) > 0) {
-            $errorsString = (string) $errors;
-            return new Response($errorsString);
-        } else {
-            $entityManager = $doctrine->getManager();
-            $entityManager->persist($movie);
-            // On exécute les requêtes SQL
-            $entityManager->flush();
+            // @todo Retourner des erreurs de validation propres
+            return $this->json($errors, Response::HTTP_UNPROCESSABLE_ENTITY);
         }
+
+        $entityManager = $doctrine->getManager();
+        $entityManager->persist($movie);
+        // On exécute les requêtes SQL
+        $entityManager->flush();
+        
         return $this->json(
             // Le film créé peut être ajouté au retour
             $movie,
