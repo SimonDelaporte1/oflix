@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-class ApiGenreController extends AbstractController
+class GenreController extends AbstractController
 {
     /**
      * Get genres
@@ -39,7 +39,7 @@ class ApiGenreController extends AbstractController
      * 
      * Get one genre item
      * 
-     * @Route("/api/genres/{id}", name="api_genre_get", methods={"GET"})
+     * @Route("/api/genres/{id<\d+>}", name="api_genre_get", methods={"GET"})
      */
     public function getGenre(Genre $genre): Response
     {
@@ -61,14 +61,16 @@ class ApiGenreController extends AbstractController
      * 
      * Get movies by genre
      * 
-     * @Route("/api/genres/{id}/movies", name="api_genre_movie_get", methods={"GET"})
+     * @Route("/api/genres/{id<\d+>}/movies", name="api_genre_movie_get", methods={"GET"})
      */
     public function getGenreMovie(Genre $genre, MovieRepository $movieRepository): Response
     {
         // @todo : retourner les films de la BDD
         // dd($genre->getId());
-        $moviesList = $movieRepository->findByGenre($genre->getId());
-        // $moviesList = $movieRepository->findAll();
+        // $moviesList = $movieRepository->findByGenre($genre->getId());
+        
+        $moviesList = $genre->getMovies();
+        
         return $this->json(
             // Les données à sérialiser (à convertir en JSON)
             $moviesList,

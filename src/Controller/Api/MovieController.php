@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
 
-class ApiMovieController extends AbstractController
+class MovieController extends AbstractController
 {
     /**
      * Get movies collection
@@ -50,7 +50,7 @@ class ApiMovieController extends AbstractController
      * 
      * @Route("/api/movies", name="api_movies_post", methods={"POST"})
      */
-    public function setCollection(Request $request, SerializerInterface $serializer, ValidatorInterface $validator, ManagerRegistry $doctrine, GenreRepository $genreRepository): Response
+    public function createItem(Request $request, SerializerInterface $serializer, ValidatorInterface $validator, ManagerRegistry $doctrine, GenreRepository $genreRepository): Response
     {
         // @todo : retourner les films de la BDD
         $jsonContent = $request->getContent();
@@ -77,10 +77,18 @@ class ApiMovieController extends AbstractController
             $entityManager->flush();
         }
         return $this->json(
-            // Les données à sérialiser (à convertir en JSON)
-            "Film N°".$movie->getId()." créé",
-            // Le status code
-            201,
+            // Le film créé peut être ajouté au retour
+            $movie,
+            // Le status code : 201 CREATED
+            // utilisons les constantes de classes !
+            Response::HTTP_CREATED,
+            // REST demande un header Location + URL de la ressource
+            [
+                // Nom de l'en-tête + URL
+                'Location' => $this->generateUrl('api_movie_get', ['id' => $movie->getId()])
+            ],
+            // Groups
+            ['groups' => 'get_movie']
         );
     }
 
@@ -88,7 +96,7 @@ class ApiMovieController extends AbstractController
      * 
      * Get one movie item
      * 
-     * @Route("/api/movies/{id}", name="api_movie_get", methods={"GET"})
+     * @Route("/api/movies/{id<\d+>}", name="api_movie_get", methods={"GET"})
      */
     public function getMovie(Movie $movie): Response
     {
@@ -107,9 +115,9 @@ class ApiMovieController extends AbstractController
     }
 
     /**
-     * Get movies collection
+     * Get random movie
      * 
-     * @Route("/api/movierand", name="api_movie_rand_get", methods={"GET"})
+     * @Route("/api/movies/random", name="api_movie_rand_get", methods={"GET"})
      */
     public function getRandMovie(MovieRepository $movieRepository): Response
     {
