@@ -2,22 +2,16 @@
 
 namespace App\Controller\Api;
 
-use App\Entity\Genre;
 use App\Entity\Movie;
-use Doctrine\ORM\EntityManager;
-use App\Repository\GenreRepository;
 use App\Repository\MovieRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\SerializerInterface;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Serializer\Exception\NotEncodableValueException;
+use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class MovieController extends AbstractController
 {
@@ -50,7 +44,7 @@ class MovieController extends AbstractController
      * 
      * @Route("/api/movies", name="api_movies_post", methods={"POST"})
      */
-    public function createItem(Request $request, SerializerInterface $serializer, ValidatorInterface $validator, ManagerRegistry $doctrine, GenreRepository $genreRepository): Response
+    public function createItem(Request $request, SerializerInterface $serializer, ValidatorInterface $validator, ManagerRegistry $doctrine): Response
     {
         // @todo : retourner les films de la BDD
         $jsonContent = $request->getContent();
@@ -61,11 +55,24 @@ class MovieController extends AbstractController
             $thisGenre = $genreRepository->find($arrayContent['genres'][0]['id']);
             $genre = new Genre();
             $genre->setName($thisGenre->getName());
+            $movie = $serializer->deserialize($jsonContent, Movie::class, 'json');
+
             $movie->addGenres($genre);
         */
+        // dd(json_decode($jsonContent, true));
         
-        $movie = $serializer->deserialize($jsonContent, Movie::class, 'json');
-
+        try {
+            // Désérialiser (convertir) le JSON en entité Doctrine Movie
+            $movie = $serializer->deserialize($jsonContent, Movie::class, 'json');
+            //dd($movie);
+        
+        } catch (NotEncodableValueException $e) {
+            return $this->json(
+                ['error' => 'JSON invalide'],
+                Response::HTTP_UNPROCESSABLE_ENTITY
+            );
+        }
+        
         $errors = $validator->validate($movie);
         if (count($errors) > 0) {
             // @todo Retourner des erreurs de validation propres

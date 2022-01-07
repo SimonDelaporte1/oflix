@@ -63,11 +63,10 @@ class Movie
     private $castings;
 
 
-    // Si on souhaite qu'un film ait au moins 1 genre
-    // @Assert\Count(min=1)
     /**
      * @ORM\ManyToMany(targetEntity=Genre::class, inversedBy="movies")
      * @Groups({"get_collection", "get_movie"})
+     * @Assert\Count(min=1)
      */
     private $genres;
 
@@ -230,16 +229,16 @@ class Movie
 
         return $this;
     }
-
+    
     /**
-     * @return Collection|genres[]
+     * @return Collection|Genre[]
      */
     public function getGenres(): Collection
     {
         return $this->genres;
     }
 
-    public function addGenres(Genre $genre): self
+    public function addGenre(Genre $genre): self
     {
         if (!$this->genres->contains($genre)) {
             $this->genres[] = $genre;
@@ -248,7 +247,7 @@ class Movie
         return $this;
     }
 
-    public function removeGenres(Genre $genre): self
+    public function removeGenre(Genre $genre): self
     {
         $this->genres->removeElement($genre);
 
