@@ -60,10 +60,10 @@ Class MainController extends AbstractController
     {
         // on rend un template twig à partir du dossier templates/
         $moviesList = $MovieRepository->findAllOrderedByDateAscQb();
-        $genreList = $GenreRepository->findAll();
+        $genresList = $GenreRepository->findAll();
         return $this->render('front/main/home.html.twig', [
             'moviesList' => $moviesList,
-            'genreList' => $genreList
+            'genresList' => $genresList
         ]);
     }
 
