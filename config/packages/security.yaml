@@ -27,10 +27,14 @@ security:
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
 
         # Le firewall de notre API => à adapter selon nos besoins
-        api:
-            pattern:   ^/api
+        api_secure:
+            pattern:   ^/api/secure
             stateless: true
             jwt: ~
+        
+        api_public:
+            pattern:   ^/api
+            stateless: true
 
         main:
             lazy: true
@@ -58,11 +62,16 @@ security:
         - { path: ^/back/, roles: ROLE_MANAGER } # back office pour les managers, uniquement en consultation
         - { path: /review/, roles: ROLE_USER } # les utilisateurs doivent avoir accès au avis
     
+
         # Les ACL de notre API
+
         # Login toujours accessible
-        - { path: ^/api/login, roles: PUBLIC_ACCESS }
-        # Toute l'API nécessite une authentification
-        - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/api/movies, roles: PUBLIC_ACCESS }
+
+        # suppression que pour les admins (méthode HTTP POST)
+        - { path: ^/api/secure/movies, roles: ROLE_ADMIN, methods: [POST]} 
+        # l'API secure nécessite une authentification
+        - { path: ^/api/secure, roles: IS_AUTHENTICATED_FULLY }
 
     role_hierarchy:
         ROLE_MANAGER: ROLE_USER

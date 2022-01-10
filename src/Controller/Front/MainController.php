@@ -87,12 +87,15 @@ Class MainController extends AbstractController
     /** 
      * @Route("/movies/list", name="main_movie_list")
      */
-    public function list(MovieRepository $MovieRepository)
+    public function list(MovieRepository $movieRepository, GenreRepository $genreRepository, Request $request)
     {
         // on rend un template twig à partir du dossier templates/
-        $moviesList = $MovieRepository->findAllOrderedByTitleAscQb();
+        $moviesList = $movieRepository->findAllOrderedByTitleAscQb($request->query->get('search'));
+        $genresList = $genreRepository->findBy([], ['name' => 'ASC']);
+
         return $this->render('front/main/movieList.html.twig', [
-            'moviesList' => $moviesList
+            'moviesList' => $moviesList,
+            'genresList' => $genresList
         ]);
     }
 

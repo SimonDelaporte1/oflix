@@ -42,7 +42,7 @@ class MovieController extends AbstractController
     /**
      * Post one movie
      * 
-     * @Route("/api/movies", name="api_movies_post", methods={"POST"})
+     * @Route("/api/secure/movies", name="api_movies_post", methods={"POST"})
      */
     public function createItem(Request $request, SerializerInterface $serializer, ValidatorInterface $validator, ManagerRegistry $doctrine): Response
     {
@@ -72,11 +72,21 @@ class MovieController extends AbstractController
                 Response::HTTP_UNPROCESSABLE_ENTITY
             );
         }
-        
+
+        // Valider l'entité
+        // @link : https://symfony.com/doc/current/validation.html#using-the-validator-service
         $errors = $validator->validate($movie);
+        // Y'a-t-il des erreurs ?
         if (count($errors) > 0) {
-            // @todo Retourner des erreurs de validation propres
-            return $this->json($errors, Response::HTTP_UNPROCESSABLE_ENTITY);
+            // tableau de retour
+            $errorsClean = [];
+            // @Retourner des erreurs de validation propres
+            /** @var ConstraintViolation $error */
+            foreach ($errors as $error) {
+                $errorsClean[$error->getPropertyPath()][] = $error->getMessage();
+            };
+
+            return $this->json($errorsClean, Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         $entityManager = $doctrine->getManager();
@@ -106,10 +116,13 @@ class MovieController extends AbstractController
      * 
      * @Route("/api/movies/{id<\d+>}", name="api_movie_get", methods={"GET"})
      */
-    public function getMovie(Movie $movie): Response
+    public function getMovie(Movie $movie = null): Response
     {
         // @todo : retourner les films de la BDD
-
+        // 404 ?
+        if ($movie === null) {
+            return $this->json(['error' => 'Film non trouvé.'], Response::HTTP_NOT_FOUND);
+        }
         return $this->json(
             // Les données à sérialiser (à convertir en JSON)
             $movie,
@@ -132,10 +145,14 @@ class MovieController extends AbstractController
         // @todo : retourner les films de la BDD
         
         // On va chercher les données
-        $movie = $movieRepository->findOneRandomMovie();
-        return $this->json( 
-            // Les données à sérialiser (à convertir en JSON)
-            $movie
+        // $movie = $movieRepository->findOneRandomMovie();
+        $movie = $movieRepository->findOneRandomMovieDql();
+
+        return $this->json(
+            $movie,
+            Response::HTTP_OK,
+            [],
+            ['groups' => 'get_movie']
         );
     }
 }

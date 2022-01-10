@@ -43,15 +43,20 @@ class MovieRepository extends ServiceEntityRepository
      * Liste des films par ordre alpha
      * en Query Builder
      */
-    public function findAllOrderedByTitleAscQb()
+    public function findAllOrderedByTitleAscQb(string $search = null)
     {
-        return $this->createQueryBuilder('m')
-            ->orderBy('m.duration', 'DESC')
-            ->getQuery()
-            ->getResult()
-        ;
-    }
+        // Le Query Builder est créé depuis l'entité Movie référencée dans cette classe de Repository
+        $query = $this->createQueryBuilder('m')
+            ->orderBy('m.title', 'ASC');
+        
+        // Search ?
+        if ($search) {
+            $query->where('m.title LIKE :search')
+            ->setParameter('search', '%'.$search.'%');
+        }
 
+        return $query->getQuery()->getResult();
+    }
     /**
      * Liste des films par ordre alpha
      * en Query Builder
@@ -95,6 +100,22 @@ class MovieRepository extends ServiceEntityRepository
         return $result;
     }
 
+    /**
+     * Get one random movie (DQL)
+     */
+    public function findOneRandomMovieDql()
+    {
+        $entityManager = $this->getEntityManager();
+
+        $query = $entityManager->createQuery(
+            'SELECT m
+            FROM App\Entity\Movie m
+            ORDER BY RAND()'
+        );
+
+        return $query->setMaxResults(1)->getOneOrNullResult();
+    }
+
     public function findByGenre($genre)
     {
         return $this->createQueryBuilder('m')
@@ -105,6 +126,7 @@ class MovieRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    
 
     // /**
     //  * @return Movie[] Returns an array of Movie objects

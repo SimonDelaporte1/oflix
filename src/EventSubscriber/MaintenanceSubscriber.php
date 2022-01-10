@@ -39,8 +39,16 @@ class MaintenanceSubscriber implements EventSubscriberInterface
 
         $response = $event->getResponse();
         $content = $response->getContent();
-        $content = str_replace('</nav>','</nav><div class="alert alert-danger">Maintenance prévue mardi 10 janvier à 17h00</div>', $content);
-        $response->setContent($content);
+        $newHtml = preg_replace(
+            // Qu'est-ce qu'on cherche ?
+            '/<\/nav>/',
+            // Par quoi on remplace ?
+            '</nav><div class="alert alert-danger m-3">Maintenance prévue mardi 10 janvier à 17h00</div>',
+            // Dans quelle chaine ?
+            $content,
+            1
+        );
+        $response->setContent($newHtml);
     }
 
     public static function getSubscribedEvents()

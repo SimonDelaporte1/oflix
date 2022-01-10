@@ -9,9 +9,15 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
+// DON'T forget the following use statement!!!
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 
 /**
  * @ORM\Entity(repositoryClass=MovieRepository::class)
+ * 
+ * @UniqueEntity("title")
+ * @UniqueEntity("slug")
  * 
  * Ecoute les événements du cycle de vie de l'entité
  * @link https://symfony.com/doc/current/doctrine/events.html#doctrine-lifecycle-callbacks
@@ -29,7 +35,7 @@ class Movie
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      * @Assert\NotBlank
      * @Groups({"get_collection", "get_movie"})
      */
@@ -110,7 +116,7 @@ class Movie
     private $reviews;
 
     /**
-     * @ORM\Column(type="string", length=2083, nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=true, unique=true)
      * @Groups({"get_collection"})
      */
     private $slug;
