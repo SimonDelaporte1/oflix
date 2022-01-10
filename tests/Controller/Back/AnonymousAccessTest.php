@@ -19,6 +19,37 @@ class AnonymousAccessTest extends WebTestCase
         $this->assertResponseRedirects();
     }
 
+
+    /**
+     * Routes en POST pour Anonymous
+     * 
+     * @dataProvider postUrls
+     */
+    public function testPagePostIsRedirect($url)
+    {
+        $client = self::createClient();
+        $client->request('POST', $url);
+
+        $this->assertResponseRedirects();
+    }
+
+    public function postUrls()
+    {
+        yield ['/back/casting/new/movie/1'];
+        yield ['/back/casting/1/edit'];
+        yield ['/back/casting/1'];
+        yield ['/back/movie/new'];
+        yield ['/back/movie/1'];
+        yield ['/back/movie/1/edit'];
+        yield ['/back/user/new'];
+        yield ['/back/user/1'];
+        yield ['/back/user/1/edit'];
+        yield ['/back/season/new'];
+        yield ['/back/season/1'];
+        yield ['/back/season/1/edit'];
+        // ...
+    }
+    
     public function getUrls()
     {
         yield ['/back/casting/movie/1'];
