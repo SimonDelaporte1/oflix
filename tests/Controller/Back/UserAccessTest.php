@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 class UserAccessTest extends WebTestCase
 {
     /**
-     * Routes en GET pour Anonymous
+     * Routes interdites back office en GET pour ROLE_USER
      * 
      * @dataProvider UrlsList
      */
@@ -27,7 +27,7 @@ class UserAccessTest extends WebTestCase
     }
 
     /**
-     * Routes en GET pour Anonymous
+     * Routes autorisées back office en GET pour ROLE_MANAGER
      * 
      * @dataProvider ManagerUrlsAuthorizedList
      */
@@ -45,7 +45,7 @@ class UserAccessTest extends WebTestCase
     }
 
     /**
-     * Routes en GET pour Anonymous
+     * Routes interdites back office en GET pour ROLE_MANAGER
      * 
      * @dataProvider ManagerUrlsForbiddenGetList
      */
@@ -63,7 +63,7 @@ class UserAccessTest extends WebTestCase
     }
 
     /**
-     * Routes en GET pour Anonymous
+     * Routes interdites back office en POST pour ROLE_MANAGER
      * 
      * @dataProvider ManagerUrlsForbiddenPostList
      */
@@ -81,7 +81,7 @@ class UserAccessTest extends WebTestCase
     }
 
     /**
-     * Routes en GET pour Anonymous
+     * Routes autorisées back office en GET pour ROLE_ADMIN
      * 
      * @dataProvider UrlsList
      */
@@ -99,7 +99,7 @@ class UserAccessTest extends WebTestCase
     }
 
    /**
-     * Routes en GET pour Anonymous
+     * Routes autorisées back office en POST pour ROLE_ADMIN avec redirections
      * 
      * @dataProvider UrlsListAdminPostWithRedirection
      */
