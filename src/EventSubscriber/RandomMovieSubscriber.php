@@ -61,7 +61,7 @@ class RandomMovieSubscriber implements EventSubscriberInterface
             return;
         }
 
-        dump('RandomMovieSubscriber appelé');
+        //  dump('RandomMovieSubscriber appelé');
 
         // On va chercher un film au hasard via MovieRepository
         // Option 1 : findAll => random dessus => pas top pour les perfs
