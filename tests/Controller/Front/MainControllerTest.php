@@ -78,5 +78,73 @@ class MainControllerTest extends WebTestCase
         $this->assertSelectorTextContains('h1', 'Poster votre avis');
     }
 
+    /**
+     * Ajouter une critique en POST 
+     */
+    public function testSuccessSubmittingform(): void
+    {
+        $client = static::createClient();
+        // Le Repo des Users
+        $userRepository = static::getContainer()->get(UserRepository::class);
+        // On récupère user@user.com
+        $testUser = $userRepository->findOneByEmail('user@user.com');
+        // simulate $testUser being logged in
+        $client->loginUser($testUser);
+        $crawler =  $client->request('GET', '/movie/review/1');
 
+        // select the button
+        $buttonCrawlerNode = $crawler->selectButton('submit_review');
+        // retrieve the Form object for the form belonging to this button
+        $form = $buttonCrawlerNode->form();
+
+        // set values on a form object
+        $form['review[username]'] = 'Simon';
+        $form['review[email]'] = 'contact@simondelaporte.com';
+        $form['review[content]'] = 'Symfony rocks!';
+        $form['review[rating]'] = '3';
+        $form['review[reactions]'] = ['smile', 'cry'];
+        $form['review[watchedAt][month]'] = '1';
+        $form['review[watchedAt][day]'] = '15';
+        $form['review[watchedAt][year]'] = '2022';
+
+        // submit the Form object
+        $client->submit($form);
+
+        $this->assertResponseStatusCodeSame(302);
+    }
+
+    /**
+     * Ajouter une critique en POST 
+     */
+    public function testErrorSubmittingform(): void
+    {
+        $client = static::createClient();
+        // Le Repo des Users
+        $userRepository = static::getContainer()->get(UserRepository::class);
+        // On récupère user@user.com
+        $testUser = $userRepository->findOneByEmail('user@user.com');
+        // simulate $testUser being logged in
+        $client->loginUser($testUser);
+        $crawler =  $client->request('GET', '/movie/review/1');
+
+        // select the button
+        $buttonCrawlerNode = $crawler->selectButton('submit_review');
+        // retrieve the Form object for the form belonging to this button
+        $form = $buttonCrawlerNode->form();
+
+        // set values on a form object
+        $form['review[username]'] = '';
+        $form['review[email]'] = 'contact@simondelaporte.com';
+        $form['review[content]'] = 'Symfony rocks!';
+        $form['review[rating]'] = '3';
+        $form['review[reactions]'] = ['smile', 'cry'];
+        $form['review[watchedAt][month]'] = '1';
+        $form['review[watchedAt][day]'] = '15';
+        $form['review[watchedAt][year]'] = '2022';
+
+        // submit the Form object
+        $client->submit($form);
+
+        $this->assertResponseStatusCodeSame(422);
+    }
 }
