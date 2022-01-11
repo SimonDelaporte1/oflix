@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\CastingRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=CastingRepository::class)
@@ -20,12 +21,14 @@ class Casting
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
      * @Groups({"get_movie"})
      */
     private $role;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
+     * @Assert\NotBlank
      * @Groups({"get_movie"})
      */
     private $creditOrder;
