@@ -88,7 +88,6 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             // Gestion du mot de passe modifié ou non ?
             // On va le chercher directement dans le formulaire car non mappé sur l'entité
             if ($form->get('password')->getData()) {

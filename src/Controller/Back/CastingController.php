@@ -43,7 +43,6 @@ class CastingController extends AbstractController
             $entityManager->flush();
 
             // On associe le film au casting
-
             $this->addFlash(
                 'success', 'Casting créé'
             );
